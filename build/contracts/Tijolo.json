@@ -1,0 +1,206 @@
+{
+  "contractName": "Tijolo",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Tijolo.sol\":\"Tijolo\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Tijolo.sol\":{\"keccak256\":\"0x4c6fac4245d52b35722473968ced1524f783af840b3e8605e72aa6e3b7b1e275\",\"urls\":[\"bzz-raw://545d978f01b0e7579c7ae9bf81d7eb3879c6621f88970842672d7e90b1785312\",\"dweb:/ipfs/QmZsg9RtTWuSQqZoK8UuaGHKDmQsVjSkr52MTsmZEfnw3M\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b506000620f4240905050603f8060266000396000f3fe6080604052600080fdfea264697066735822122072d3d1f2432616ec62e699895d3ac3feb467b2ee746c3383219f9f751bedcdc664736f6c634300080f0033",
+  "deployedBytecode": "0x6080604052600080fdfea264697066735822122072d3d1f2432616ec62e699895d3ac3feb467b2ee746c3383219f9f751bedcdc664736f6c634300080f0033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "26:107:1:-:0;;;48:82;;;;;;;;;;72:19;116:7;102:21;;62:68;26:107;;;;;;",
+  "deployedSourceMap": "26:107:1:-:0;;;;;",
+  "source": "pragma solidity ^0.8.15;\n\ncontract Tijolo {\n    constructor() {\n        uint256 totalSupply ;\n        totalSupply = 1000000;\n    }\n\n}",
+  "sourcePath": "/Users/alinevillaca/personal/nft-playground/contracts/Tijolo.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/Tijolo.sol",
+    "exportedSymbols": {
+      "Tijolo": [
+        46
+      ]
+    },
+    "id": 47,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 34,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".15"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:1"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "Tijolo",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 46,
+        "linearizedBaseContracts": [
+          46
+        ],
+        "name": "Tijolo",
+        "nameLocation": "35:6:1",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 44,
+              "nodeType": "Block",
+              "src": "62:68:1",
+              "statements": [
+                {
+                  "assignments": [
+                    38
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 38,
+                      "mutability": "mutable",
+                      "name": "totalSupply",
+                      "nameLocation": "80:11:1",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 44,
+                      "src": "72:19:1",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 37,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "72:7:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 39,
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "72:19:1"
+                },
+                {
+                  "expression": {
+                    "id": 42,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "id": 40,
+                      "name": "totalSupply",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 38,
+                      "src": "102:11:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "hexValue": "31303030303030",
+                      "id": 41,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "116:7:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_1000000_by_1",
+                        "typeString": "int_const 1000000"
+                      },
+                      "value": "1000000"
+                    },
+                    "src": "102:21:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 43,
+                  "nodeType": "ExpressionStatement",
+                  "src": "102:21:1"
+                }
+              ]
+            },
+            "id": 45,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nameLocation": "-1:-1:-1",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 35,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "59:2:1"
+            },
+            "returnParameters": {
+              "id": 36,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "62:0:1"
+            },
+            "scope": 46,
+            "src": "48:82:1",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 47,
+        "src": "26:107:1",
+        "usedErrors": []
+      }
+    ],
+    "src": "0:133:1"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0xBA5a2a4839b7FF6D7E0F43873f050F7E16bEE387",
+      "transactionHash": "0x82b15f7b8b1e58b51961d83d3ce1e70b9b651bcb504120f63ca2146347be1341"
+    }
+  },
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-07-29T11:33:00.954Z",
+  "networkType": "ethereum",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
