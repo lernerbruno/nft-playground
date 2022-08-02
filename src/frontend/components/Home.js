@@ -49,54 +49,13 @@ const Home = ({ marketplace, nft }) => {
   )
   return (
     <div className="flex justify-center">
-      <div className="px-2 container">
-      <Row xs={1} md={2} lg={10} className="g-4 py-5">
-        <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left" }}>Pensar global e agir local nunca foi tão real</h1>
-      </Row>
-      <Row xs={2} md={2} lg={10} className="g-4 py-5">
-        <Col key={0} className="overflow-hidden">
-          <Card>
-            <Card.Img variant="top"  />
-            <Card.Body color="secondary">
-              <Card.Title>Acompanhe seu impacto</Card.Title>
-              <Card.Text>
-                Veja como os seus bens digitais estão impactando as causa sociais associadas
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <div className='d-grid'>
-                <Button onClick={() => {}} variant="primary" size="lg">
-                  Veja seu portfolio
-                </Button>
-              </div>
-            </Card.Footer>
-          </Card>
-        </Col>
-        <Col key={1} className="overflow-hidden">
-          <Card>
-            <Card.Img variant="top"  />
-            <Card.Body color="secondary">
-              <Card.Title>Saiba onde investir</Card.Title>
-              <Card.Text>
-                Veja as campanhas sociais que estão rolando e garanta sua arte social
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer>
-              <div className='d-grid'>
-                <Button onClick={() => {}} variant="primary" size="lg">
-                  Compre e Suporte
-                </Button>
-              </div>
-            </Card.Footer>
-          </Card>
-        </Col>
-      </Row>
-
-      </div>
-      
       {items.length > 0 ?
         <div className="px-5 container">
-          <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left" }}>Coleções em destaque</h1>
+          <Row xs={1} md={2} lg={10} className="g-4 py-5">
+            <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left" }}>Olá, Vamos movimentar a economia social?</h1> &nbsp;
+            <h7 style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"left" }}>Toda transação na nossa plataforma beneficiará um projeto social</h7>
+          </Row>
+          <h1 style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Coleções em destaque</h1>
           <Row xs={1} md={2} lg={4} className="g-4 py-5">
             {items.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">

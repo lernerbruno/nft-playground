@@ -9,6 +9,12 @@
   pointer-events: none;
 }
 
+.Home-logo {
+  height: 400;
+  width: 363px;
+  text-align: right;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

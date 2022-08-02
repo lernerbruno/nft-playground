@@ -46,11 +46,16 @@ export default function MyPurchases({ marketplace, nft, account }) {
     <div className="flex justify-center">
       {purchases.length > 0 ?
         <div className="px-5 container">
+          <Row xs={1} md={1} lg={1} className="g-4 py-5">
+            <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left" }}>Esse é sua exposição de contribuições sociais</h1>
+          </Row>
           <Row xs={1} md={2} lg={4} className="g-4 py-5">
             {purchases.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
                 <Card>
                   <Card.Img variant="top" src={item.image} />
+                  <Card.Body>70% desse valor foi doado para o projeto <p style={{color: 'blue'}} onPress={() => {}}> 5 casas no Jardim Gramacho</p> da ONG
+                  <p style={{color: 'blue'}} onPress={() => {}}> TETO</p> </Card.Body>
                   <Card.Footer>{ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
                 </Card>
               </Col>
