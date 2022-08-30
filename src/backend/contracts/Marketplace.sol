@@ -13,6 +13,7 @@ contract Marketplace is ReentrancyGuard {
     address payable public immutable feeAccount; // the account that receives fees
     uint public immutable feePercent; // the fee percentage on sales 
     uint public itemCount; 
+    mapping(address => uint) public projectsItemCount;
 
     struct Item {
         uint itemId;
@@ -52,6 +53,8 @@ contract Marketplace is ReentrancyGuard {
         require(_price > 0, "Price must be greater than zero");
         // increment itemCount
         itemCount ++;
+        projectsItemCount[msg.sender] ++;
+        
         // transfer nft
         _nft.transferFrom(msg.sender, address(this), _tokenId);
         // add new item to items mapping
