@@ -9,13 +9,14 @@ const Navigation = ({ web3Handler, account }) => {
         <Navbar expand="lg" bg="secondary" variant="dark">
             <Container>
                 <Navbar.Brand href="">
-                     Social Crypto
+                     Sogo Funders
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/">Explore</Nav.Link>
-                        <Nav.Link as={Link} to="/create">Create</Nav.Link>
+                        <Nav.Link as={Link} to="/create">Create Token</Nav.Link>
+                        <Nav.Link as={Link} to="/create-sogo-community">Create Sogo Community</Nav.Link>
                         <Nav.Link as={Link} to="/my-listed-items">My Listed Items</Nav.Link>
                         <Nav.Link as={Link} to="/my-purchases">My Purchases</Nav.Link>
                     </Nav>
