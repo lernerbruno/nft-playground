@@ -3,9 +3,12 @@ pragma solidity ^0.8.4;
 
 contract Organization {
     address payable public ongAccount;
+    string orgName;
 
-    constructor() {
+
+    constructor(string memory _orgName) {
         ongAccount = payable(msg.sender);
+        orgName = _orgName;
     }
 
     receive() external payable {}

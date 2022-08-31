@@ -3,7 +3,7 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract SocialNFT is ERC721URIStorage{
+contract SogoNFT is ERC721URIStorage{
     uint public tokenCount;
     // map from token id to social project 
     mapping(uint => uint) public communityPerToken;

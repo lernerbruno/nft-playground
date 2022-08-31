@@ -5,18 +5,24 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   
-  // Get the ContractFactories and Signers here.
-  const NFT = await ethers.getContractFactory("NFT");
-  const Marketplace = await ethers.getContractFactory("Marketplace");
-  // deploy contracts
-  const marketplace = await Marketplace.deploy(1);
-  const nft = await NFT.deploy();
+  // Get the ContractFactories and Signers
+  const SogoNFT = await ethers.getContractFactory("SogoNFT");
+  const Sogo = await ethers.getContractFactory("Sogo");
+  const Organization = await ethers.getContractFactory("Organization");
+  
+  // Deploy contracts
+  const sogo = await Sogo.deploy(1);
+  const sogoNFT = await SogoNFT.deploy();
+  const organization = await Organization.deploy("TETO");
+  
   // Save copies of each contracts abi and address to the frontend.
-  saveFrontendFiles(marketplace , "Marketplace");
-  saveFrontendFiles(nft , "NFT");
+  saveFrontendFiles(sogo , "Sogo");
+  saveFrontendFiles(sogoNFT , "SogoNFT");
+  saveFrontendFiles(organization , "Organization");
 
-  console.log("NFT address: ", nft.address);
-  console.log("Marketplace address: ", marketplace.address);
+  console.log("SogoNFT address: ", sogoNFT.address);
+  console.log("Sogo address: ", sogo.address);
+  console.log("Organization address: ", organization.address);
 }
 
 function saveFrontendFiles(contract, name) {

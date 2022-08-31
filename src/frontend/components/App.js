@@ -6,15 +6,18 @@ import {
 import Navigation from './Navbar';
 import Home from './Home.js'
 import Create from './Create.js'
+// import CreateSocialProject from './CreateSocialProject.js'
 import MyListedItems from './MyListedItems.js'
 import MyPurchases from './MyPurchases.js'
-import MarketplaceAbi from '../contractsData/Marketplace.json'
-import MarketplaceAddress from '../contractsData/Marketplace-address.json'
-import NFTAbi from '../contractsData/NFT.json'
-import NFTAddress from '../contractsData/NFT-address.json'
+import SogoAbi from '../contractsData/Sogo.json'
+import SogoAddress from '../contractsData/Sogo-address.json'
+import SogoNFTAbi from '../contractsData/SogoNFT.json'
+import SogoNFTAddress from '../contractsData/SogoNFT-address.json'
+import OrganizationAddress from '../contractsData/Organization-address.json'
+import OrganizationAbi from '../contractsData/Organization.json'
 import { useState } from 'react'
 import { ethers } from "ethers"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useHistory } from "react-router-dom";
 import { Spinner, Col, Row, Card, Button } from 'react-bootstrap'
 
 import './App.css';
@@ -23,7 +26,9 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [account, setAccount] = useState(null)
   const [nft, setNFT] = useState({})
-  const [marketplace, setMarketplace] = useState({})
+  const [sogo, setSogo] = useState({})
+  const [organization, setOrganization] = useState({})
+  
   // MetaMask Login/Connect
   const web3Handler = async () => {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -45,10 +50,12 @@ function App() {
   }
   const loadContracts = async (signer) => {
     // Get deployed copies of contracts
-    const marketplace = new ethers.Contract(MarketplaceAddress.address, MarketplaceAbi.abi, signer)
-    setMarketplace(marketplace)
-    const nft = new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer)
+    const sogo = new ethers.Contract(SogoAddress.address, SogoAbi.abi, signer)
+    setSogo(sogo)
+    const nft = new ethers.Contract(SogoNFTAddress.address, SogoNFTAbi.abi, signer)
     setNFT(nft)
+    const organization = new ethers.Contract(OrganizationAddress.address, OrganizationAbi.abi, signer)
+    setOrganization(organization)
     setLoading(false)
   }
   return (
@@ -63,46 +70,181 @@ function App() {
               {/* <Spinner animation="border" style={{ display: 'flex' }} />
               <p className='mx-3 my-0'>Awaiting Metamask Connection...</p> */}
             <div className="px-2 container">
-            <Row xs={2} md={2} lg={2} className="g-2 py-5">
-              <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left" }}>Pensar global e agir local nunca foi tão real</h1>
-              {/* <img src='planeta.gif' className="Home-logo" /> */}
+            <Row xs={1} md={1} lg={1} className="g-2 py-5">
+              <h1 style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"center" }}>Seja a mudança que você quer ver no mundo e receba seu desconto no IR </h1>
+              <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"center", paddingTop: '50px' }}>R$ 234.877.437,20</h1>
+              <h1 style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Valor total doado</h1>
             </Row>
-            <Row xs={2} md={2} lg={10} className="g-4 py-5">
+            <Row xs={3} md={3} lg={3} className="g-4 py-5">
               <Col key={0} className="overflow-hidden">
                 <Card>
                   <Card.Img variant="top"  />
                   <Card.Body color="secondary" style={{height: '17rem'}}>
-                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Explore projetos</Card.Title>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Doe diretamente</Card.Title>
                     <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
-                      Nossas ONGs parceiras registram seus projeto e vendem participação no seu progresso atraves da compra de tokens.
-                      Comprando um token, você segue o projeto e recebe o reconhecimento em forma de arte.
+                      Escolha uma de nossas milhares de organizações cadastradas para receber uma doação de qualquer valor
                     </Card.Text>
                   </Card.Body>
-                  <Card.Footer>
+                  {/* <Card.Footer>
                     <div className='d-grid'>
                       <Button onClick={() => {}} variant="primary" size="lg">
-                        Compre e Suporte
+                        Explorar Campanhas Sociais
                       </Button>
                     </div>
-                  </Card.Footer>
+                  </Card.Footer> */}
                 </Card>
               </Col>
               <Col key={1} className="overflow-hidden">
                 <Card>
                   <Card.Img variant="top"  />
                   <Card.Body color="secondary" style={{height: '17rem'}}>
-                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Acompanhe seu impacto</Card.Title>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Explore Fundos comunitários</Card.Title>
                     <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
-                      Veja como os projetos que você apoiou evoluiram e como sua colaboração foi importante. E use seus tokens para interagir com a comunidade
+                      Caso você não saiba qual organização doar, temos fundos com objetivos bem definidos e uma curadoria de organizações que receberam o beneficio e atuarão no impacto
                     </Card.Text>
                   </Card.Body>
-                  <Card.Footer>
+                  {/* <Card.Footer>
                     <div className='d-grid'>
                       <Button onClick={() => {}} variant="primary" size="lg">
                         Veja seu portfolio
                       </Button>
                     </div>
-                  </Card.Footer>
+                  </Card.Footer> */}
+                </Card>
+              </Col>
+              <Col key={2} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Explore projetos NFT</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      Também temos venda de artes digitais e outros tipos de tokens que beneficiam organizações de maneiras criativas
+                    </Card.Text>
+                  </Card.Body>
+                  {/* <Card.Footer>
+                    <div className='d-grid'>
+                      <Button onClick={() => {}} variant="primary" size="lg">
+                        Explorar Campanhas Sociais
+                      </Button>
+                    </div>
+                  </Card.Footer> */}
+                </Card>
+              </Col>
+            </Row>
+            <Row xs={1} md={1} lg={1} className="g-2 py-5">
+              <h1 style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Explore Fundos comunitários</h1>
+            </Row>
+            <Row xs={4} md={7} lg={10} className="g-2 py-5">
+            <Col key={0} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Fundo RJZ</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      O Fundo RJZ é um Changemaker e um fundo de endowment privado que fomenta e promove causas sociais, e faz parte de 3 áreas de mudança  da Sogo: Educação, Saúde e Assistência Social.
+                    </Card.Text>
+                  </Card.Body>
+                  
+                </Card>
+              </Col>
+              <Col key={1} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Fundo Covid</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      Juntamos organizações que estão focada no combate a covid aos mais necessitados.
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col key={2} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Fundo Ucrânia</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      Juntamos as organizações que mais estão ajudando a resistência ucraniana
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+            <Row xs={1} md={1} lg={1} className="g-2 py-5">
+              <h1 style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Explore Organizações</h1>
+            </Row>
+            <Row xs={4} md={7} lg={10} className="g-2 py-5">
+            <Col key={0} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>TETO</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      Uma organização mundial focada na criação de casas emergenciais em locais de risco
+                    </Card.Text>
+                  </Card.Body>
+                  
+                </Card>
+              </Col>
+              <Col key={1} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Projeto Futuro</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      Financiamento da faculdade para pessoas necessitadas
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col key={2} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Dança Rocinha</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      Atividades de dança na comunidade da Rocinha
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+            <Row xs={1} md={1} lg={1} className="g-2 py-5">
+              <h1 style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Explore Projetos NFT</h1>
+            </Row>
+            <Row xs={4} md={7} lg={10} className="g-2 py-5">
+            <Col key={0} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>TETO</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      Uma organização mundial focada na criação de casas emergenciais em locais de risco
+                    </Card.Text>
+                  </Card.Body>
+                  
+                </Card>
+              </Col>
+              <Col key={1} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Projeto Futuro</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      Financiamento da faculdade para pessoas necessitadas
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col key={2} className="overflow-hidden">
+                <Card>
+                  <Card.Img variant="top"  />
+                  <Card.Body color="secondary" style={{height: '17rem'}}>
+                    <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Dança Rocinha</Card.Title>
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" ,  paddingTop:'60px'}}>
+                      Atividades de dança na comunidade da Rocinha
+                    </Card.Text>
+                  </Card.Body>
                 </Card>
               </Col>
             </Row>
@@ -113,16 +255,19 @@ function App() {
           ) : (
             <Routes>
               <Route path="/" element={
-                <Home marketplace={marketplace} nft={nft} />
+                <Home marketplace={sogo} nft={nft} organization={organization} />
               } />
               <Route path="/create" element={
-                <Create marketplace={marketplace} nft={nft} />
+                <Create marketplace={sogo} nft={nft} />
+              } />
+              <Route path="/create-social-project" element={
+                <CreateSocialProject marketplace={sogo} nft={nft} />
               } />
               <Route path="/my-listed-items" element={
-                <MyListedItems marketplace={marketplace} nft={nft} account={account} />
+                <MyListedItems marketplace={sogo} nft={nft} account={account} />
               } />
               <Route path="/my-purchases" element={
-                <MyPurchases marketplace={marketplace} nft={nft} account={account} />
+                <MyPurchases marketplace={sogo} nft={nft} account={account} />
               } />
             </Routes>
           )}
