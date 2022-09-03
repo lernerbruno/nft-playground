@@ -3,44 +3,77 @@ import { ethers } from "ethers"
 import { Modal, Row, Col, Card, Button } from 'react-bootstrap'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-const Home = ({ marketplace, nft, organization }) => {
+const Home = ({ sogo, nft, organization }) => {
 
   const [loading, setLoading] = useState(true)
   const [orgName, setOrgname] = useState('')
-  const [items, setItems] = useState([])
-  const [itemCount, setItemCount] = useState(0)
-  const loadMarketplaceItems = async () => {
-    // Load all unsold items
-    const itemCount = await marketplace.itemCount()
-    console.log(itemCount)
-    setItemCount(itemCount)
+  const [funds, setFunds] = useState([])
+  const [fundCount, setFundCount] = useState(0)
+  // const loadMarketplaceItems = async () => {
+  //   // Load all unsold items
+  //   const itemCount = await sogo.itemCount()
+  //   console.log(itemCount)
+  //   setItemCount(itemCount)
     
-    let items = []
-    for (let i = 1; i <= itemCount; i++) {
-      const item = await marketplace.items(i)
-      if (!item.sold) {
-        // get uri url from nft contract
-        const uri = await nft.tokenURI(item.tokenId)
-        const imagePath = JSON.parse(uri.substring(6))["image"]
+  //   let items = []
+  //   for (let i = 1; i <= itemCount; i++) {
+  //     const item = await sogo.items(i)
+  //     if (!item.sold) {
+  //       // get uri url from nft contract
+  //       const uri = await nft.tokenURI(item.tokenId)
+  //       const imagePath = JSON.parse(uri.substring(6))["image"]
         
-        // use uri to fetch the nft metadata stored on ipfs 
-        // const response = await fetch(uri)
-        // const metadata = await response.json()
-        // get total price of item (item price + fee)
-        const totalPrice = await marketplace.getTotalPrice(item.itemId)
-        // Add item to items array
-        items.push({
-          totalPrice,
-          itemId: item.itemId,
-          seller: item.seller,
-          // name: metadata.name,
-          // description: metadata.description,
-          image: `assets/${imagePath}`
-        })
-      }
+  //       // use uri to fetch the nft metadata stored on ipfs 
+  //       // const response = await fetch(uri)
+  //       // const metadata = await response.json()
+  //       // get total price of item (item price + fee)
+  //       const totalPrice = await sogo.getTotalPrice(item.itemId)
+  //       // Add item to items array
+  //       items.push({
+  //         totalPrice,
+  //         itemId: item.itemId,
+  //         seller: item.seller,
+  //         // name: metadata.name,
+  //         // description: metadata.description,
+  //         image: `assets/${imagePath}`
+  //       })
+  //     }
+  //   }
+  //   setLoading(false)
+  //   setItems(items)
+  // }
+
+  const loadSogoFunds = async () => {
+    // Load all unsold items
+    const fundsCount = await sogo.fundsCount()
+    setFundCount(fundsCount)
+    
+    let funds = []
+    for (let i = 1; i <= fundsCount; i++) {
+      const fund = await sogo.sogoFunds(i)
+      console.log(fund.fundName)
+      // // get uri url from nft contract
+      // const uri = await nft.tokenURI(item.tokenId)
+      // const imagePath = JSON.parse(uri.substring(6))["image"]
+      
+      // use uri to fetch the nft metadata stored on ipfs 
+      // const response = await fetch(uri)
+      // const metadata = await response.json()
+      // get total price of item (item price + fee)
+      const totalDonations = 
+      // Add item to items array
+      funds.push({
+        fundName: fund.fundName,
+        totalDonations: fund.totalValue,
+        // seller: item.seller,
+        // // name: metadata.name,
+        // // description: metadata.description,
+        // image: `assets/${imagePath}`
+      })
+    
     }
     setLoading(false)
-    setItems(items)
+    setFunds(funds)
   }
 
   // const loadPage = async () => {
@@ -78,13 +111,13 @@ const Home = ({ marketplace, nft, organization }) => {
   // }
 
 
-  const buyMarketItem = async (item) => {
-    await (await marketplace.purchaseItem(item.itemId, { value: item.totalPrice })).wait()
-    loadMarketplaceItems()
-  }
+  // const buyMarketItem = async (item) => {
+  //   await (await sogo.purchaseItem(item.itemId, { value: item.totalPrice })).wait()
+  //   loadMarketplaceItems()
+  // }
 
   useEffect(() => {
-    loadMarketplaceItems();
+    loadSogoFunds();
   }, [])
   if (loading) return (
     <main style={{ padding: "1rem 0" }}>
@@ -105,13 +138,13 @@ const Home = ({ marketplace, nft, organization }) => {
             <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left", width:'75%' }}>Construa 4 casas em Jardim Gramacho</h1> 
           </Row>
           <Row xs={1} md={2} lg={10} className="g-4 py-5">
-            <h1 style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left", width:'10%' }}> {parseInt(itemCount['_hex'], 16)} Items </h1> 
+            {/* <h1 style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left", width:'10%' }}> {parseInt(itemCount['_hex'], 16)} Items </h1>  */}
             <h1 style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left", width:'10%' }}> R$ 100.000 Total Sold </h1> 
             <ProgressBar animated style={{textAlign:"right", width:'80%', margin: 'auto' }} now={60} label={`60%`}/>
           </Row>
-          {items.length > 0 ?
+          {/* {funds.length > 0 ?
             <Row xs={1} md={2} lg={4} className="g-4 py-5">
-              {items.map((item, idx) => (
+              {funds.map((fund, idx) => (
                 <Col key={idx} className="overflow-hidden">
                   <Card>
                     <Card.Img variant="top" src={item.image} />
@@ -123,7 +156,7 @@ const Home = ({ marketplace, nft, organization }) => {
                     </Card.Body>
                     <Card.Footer>
                       <div className='d-grid'>
-                        <Button onClick={() => buyMarketItem(item)} variant="primary" size="lg">
+                        <Button onClick={() => {}} variant="primary" size="lg">
                           Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
                         </Button>
                       </div>
@@ -137,7 +170,7 @@ const Home = ({ marketplace, nft, organization }) => {
             <main style={{ padding: "1rem 0" }}>
               <h2>No listed assets</h2>
             </main>
-          )}
+          )} */}
         </div>
         
     </div>

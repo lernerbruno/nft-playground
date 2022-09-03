@@ -261,7 +261,7 @@ function App() {
                 <Create marketplace={sogo} nft={nft} />
               } />
               <Route path="/create-sogo-community" element={
-                <CreateSogoCommunity sogo={sogo} sogoNFT={nft} />
+                <CreateSogoCommunity organization={organization} sogo={sogo} sogoNFT={nft} />
               } />
               <Route path="/my-listed-items" element={
                 <MyListedItems marketplace={sogo} nft={nft} account={account} />

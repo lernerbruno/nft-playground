@@ -7,13 +7,13 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "hardhat/console.sol";
 
-struct CommunityFund {
-    uint communityId;
+struct SogoFund {
+    uint fundId;
+    string fundName;
     address creator;
-    // TODO: make it a list
-    address donators;
-    // TODO: make it a list
-    address payable ong;
+    // mapping(address => uint) donations;
+    // mapping(address => uint) ngoGrants;
+    address payable org;
     uint totalValue;
 }
 
@@ -35,8 +35,8 @@ contract Sogo is ReentrancyGuard {
     uint public fundsCount;
     uint public sogoArtCount;
     
-    // communityId -> CommunityFund
-    mapping(uint => CommunityFund) public communityFunds;
+    // fundId -> SogoFund
+    mapping(uint => SogoFund) public sogoFunds;
     // sogo token id -> community id
     mapping(uint => uint) public tokenToCommunity;
     // nft seller token count
@@ -82,7 +82,7 @@ contract Sogo is ReentrancyGuard {
     }
 
     // Make Community Fund
-    function makeCommunityFund(address ong, uint initialDonation) external payable nonReentrant {
+    function makeSogoFund(address ong, uint initialDonation, string memory _fundName) external payable nonReentrant {
         uint totalDonation = getTotalPrice(initialDonation);
         require(totalDonation > 0, "initial donation needs to be > 0");
         require(initialDonation <= msg.value, "msg value is lower than initial Donation");        
@@ -93,15 +93,20 @@ contract Sogo is ReentrancyGuard {
 
         // transfer fee to sogo
         feeAccount.transfer(totalDonation - initialDonation);
-        
+
+        // SogoFund storage newFund = SogoFund.push();
+        // newRequest.value = value;
+        SogoFund memory newFund = SogoFund ({
+            fundId: fundsCount,
+            fundName: _fundName, 
+            creator: msg.sender,
+            org: payable(ong), 
+            totalValue: totalDonation
+        });
+        // newFund.donatisons[msg.sender] = totalDonation;
+
         // add new item to items mapping
-        communityFunds[fundsCount] = CommunityFund (
-            fundsCount,
-            msg.sender,
-            msg.sender,
-            payable(ong),
-            totalDonation
-        );
+        sogoFunds[fundsCount] = newFund;
 
         // emit FundCreated event
         emit FundCreated(
@@ -112,25 +117,25 @@ contract Sogo is ReentrancyGuard {
         );
     }
 
-    function donateToFund(uint communityId, uint donationValue) external payable nonReentrant {
+    function donateToFund(uint fundId, uint donationValue) external payable nonReentrant {
         uint totalDonation = getTotalPrice(donationValue);
         require(totalDonation > 0, "initial donation needs to be > 0");
-        CommunityFund memory comFund = communityFunds[communityId];
+        SogoFund memory sogoFund = sogoFunds[fundId];
 
         // transfer donation to ong
-        comFund.ong.transfer(donationValue);
+        sogoFund.org.transfer(donationValue);
 
         // transfer fee to Sogo
         feeAccount.transfer(totalDonation - donationValue);
 
         // update Fund total value to sold
-        comFund.totalValue += donationValue;
+        sogoFund.totalValue += donationValue;
         // comFund.donators.append(msg.sender);
 
         // emit Donation event
         emit DonatedToFund(
             msg.sender,
-            communityId,
+            fundId,
             donationValue
         );
     }

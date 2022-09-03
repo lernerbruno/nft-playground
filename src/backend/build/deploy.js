@@ -13,7 +13,7 @@ async function main() {
   // Deploy contracts
   const sogo = await Sogo.deploy(1);
   const sogoNFT = await SogoNFT.deploy();
-  const organization = await Organization.deploy("TETO");
+  const organization = await Organization.deploy("TETO", 1);
   
   // Save copies of each contracts abi and address to the frontend.
   saveFrontendFiles(sogo , "Sogo");

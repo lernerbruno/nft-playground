@@ -4,13 +4,12 @@ import { Row, Form, Button } from 'react-bootstrap'
 // import { create as ipfsHttpClient } from 'ipfs-http-client'
 // const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
-const CreateSogoCommunity = ({ sogo, sogoNFT }) => {
+const CreateSogoCommunity = ({ organization, sogo, sogoNFT }) => {
     const [beneficiaries, setBeneficiaries] = useState([])
-    // const [projectLogo, setProjectLogo] = useState('')
+    const [initialDonation, setInitialDonation] = useState(0)
     const [purpose, setPurpose] = useState('')
-  
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
+    const [name, setName] = useState('')
+    const [description, setDescription] = useState('')
 //   const uploadToIPFS = async (event) => {
 //     event.preventDefault()
 //     const file = event.target.files[0]
@@ -26,12 +25,11 @@ const CreateSogoCommunity = ({ sogo, sogoNFT }) => {
 //   }
 
   const CreateSogoCommunity = async () => {
-    if (!purpose || !name  || !description || !beneficiaries) return
+    if (!purpose || !name  || !description || !beneficiaries || !initialDonation) return
     try{
-    //   const SocialProject = await ethers.getContractFactory("SocialProject");
-    //   const socialProject = await SocialProject.deploy(orgName, symbol, projName);
-    
-    //   mintThenList(result)
+        console.log(organization)
+        const orgAccount = await organization.ongAccount
+        await (await sogo.makeSogoFund(orgAccount, initialDonation, name)).wait()
         console.log(purpose,name,description,beneficiaries);
     } catch(error) {
       console.log("ipfs uri upload error: ", error)
@@ -59,6 +57,7 @@ const CreateSogoCommunity = ({ sogo, sogoNFT }) => {
               <Form.Control onChange={(e) => setName(e.target.value)} size="lg" required type="text" placeholder="Name" />
               <Form.Control onChange={(e) => setPurpose(e.target.value)} size="lg" required as="textarea" placeholder="Purpose" />
               <Form.Control onChange={(e) => setDescription(e.target.value)} size="lg" required as="textarea" placeholder="Description" />
+              <Form.Control onChange={(e) => setInitialDonation(e.target.value)} size="lg" required as="textarea" placeholder="Initial Donation (ETH)" />
 
               {/* Maybe do in another page */}
               <Form.Select onChange={(e) => setBeneficiaries(e.target.value)} size="lg" required as="dropdown" placeholder="Select beneficary NGOs" >
