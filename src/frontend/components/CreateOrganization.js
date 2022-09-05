@@ -1,15 +1,20 @@
 import { useState } from 'react'
 import { Row, Form, Button } from 'react-bootstrap'
+import {Routes, Route, useNavigate} from 'react-router-dom';
+
 
 const CreateOrganization = ({ organizationFactory }) => {
     const [purpose, setPurpose] = useState('')
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
+    const navigate = useNavigate();
 
     const DeployOrganization = async () => {
         if (!purpose || !name  || !description) return
         try{
-            await(await organizationFactory.createOrganization(name)).wait()
+            await(await organizationFactory.createOrganization(name, purpose, description)).wait()
+            // TODO: Create a success modal or something
+            navigate('/');
         } catch(error) {
             console.log("Error creating Organization: ", error)
         }

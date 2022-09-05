@@ -1,57 +1,79 @@
 import { useState, useEffect } from 'react'
-import { ethers } from "ethers"
+import {useNavigate} from 'react-router-dom';
 import { Modal, Row, Col, Card, Button } from 'react-bootstrap'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-const Home = ({ sogo, nft, organization }) => {
+const Home = ({ sogo, nft, organizationFactory }) => {
 
   const [loading, setLoading] = useState(true)
-  const [orgName, setOrgname] = useState('')
+  const [orgs, setOrgs] = useState([])
   const [funds, setFunds] = useState([])
-  const [fundCount, setFundCount] = useState(0)
+  const [orgCount, setOrgCount] = useState(0)
+  const navigate = useNavigate();
+
+  const loadOrganizations = async () => {
+    const orgCount = await organizationFactory.getOrgCount()
+    setOrgCount(orgCount)
+    let orgs = []
+    for (let i = 0; i < orgCount; i++) {
+      const orgName = await organizationFactory.getOrganizationName(i)
+      const orgPurpose = await organizationFactory.getOrganizationPurpose(i)
+      const orgDescription = await organizationFactory.getOrganizationDescription(i)
+      const orgBalance = await organizationFactory.getOrganizationBalance(i)
+      orgs.push({
+        name: orgName,
+        purpose: orgPurpose,
+        description: orgDescription,
+        balance: orgBalance
+      })
+    }
+    setOrgs(orgs)
+  }
+
   // const loadMarketplaceItems = async () => {
   //   // Load all unsold items
   //   const itemCount = await sogo.itemCount()
   //   console.log(itemCount)
   //   setItemCount(itemCount)
     
-  //   let items = []
-  //   for (let i = 1; i <= itemCount; i++) {
-  //     const item = await sogo.items(i)
-  //     if (!item.sold) {
-  //       // get uri url from nft contract
-  //       const uri = await nft.tokenURI(item.tokenId)
-  //       const imagePath = JSON.parse(uri.substring(6))["image"]
+    // let items = []
+    // for (let i = 1; i <= itemCount; i++) {
+    //   const item = await sogo.items(i)
+    //   if (!item.sold) {
+    //     // get uri url from nft contract
+    //     const uri = await nft.tokenURI(item.tokenId)
+    //     const imagePath = JSON.parse(uri.substring(6))["image"]
         
-  //       // use uri to fetch the nft metadata stored on ipfs 
-  //       // const response = await fetch(uri)
-  //       // const metadata = await response.json()
-  //       // get total price of item (item price + fee)
-  //       const totalPrice = await sogo.getTotalPrice(item.itemId)
-  //       // Add item to items array
-  //       items.push({
-  //         totalPrice,
-  //         itemId: item.itemId,
-  //         seller: item.seller,
-  //         // name: metadata.name,
-  //         // description: metadata.description,
-  //         image: `assets/${imagePath}`
-  //       })
-  //     }
-  //   }
-  //   setLoading(false)
-  //   setItems(items)
+    //     // use uri to fetch the nft metadata stored on ipfs 
+    //     // const response = await fetch(uri)
+    //     // const metadata = await response.json()
+    //     // get total price of item (item price + fee)
+    //     const totalPrice = await sogo.getTotalPrice(item.itemId)
+    //     // Add item to items array
+    //     items.push({
+    //       totalPrice,
+    //       itemId: item.itemId,
+    //       seller: item.seller,
+    //       // name: metadata.name,
+    //       // description: metadata.description,
+    //       image: `assets/${imagePath}`
+    //     })
+    //   }
+    // }
+    // setLoading(false)
+    // setItems(items)
   // }
 
   const loadSogoFunds = async () => {
     // Load all unsold items
+    // console.log(await sogo.fundsCount())
     const fundsCount = await sogo.fundsCount()
-    setFundCount(fundsCount)
+    // setFundCount(fundsCount)
     
     let funds = []
     for (let i = 1; i <= fundsCount; i++) {
       const fund = await sogo.sogoFunds(i)
-      console.log(fund.fundName)
+      
       // // get uri url from nft contract
       // const uri = await nft.tokenURI(item.tokenId)
       // const imagePath = JSON.parse(uri.substring(6))["image"]
@@ -110,6 +132,9 @@ const Home = ({ sogo, nft, organization }) => {
   //   // }
   // }
 
+  const navigateToOrg = async(e) => {
+    navigate(0)
+  }
 
   // const buyMarketItem = async (item) => {
   //   await (await sogo.purchaseItem(item.itemId, { value: item.totalPrice })).wait()
@@ -117,7 +142,8 @@ const Home = ({ sogo, nft, organization }) => {
   // }
 
   useEffect(() => {
-    loadSogoFunds();
+    loadOrganizations();
+    setLoading(false);
   }, [])
   if (loading) return (
     <main style={{ padding: "1rem 0" }}>
@@ -128,39 +154,30 @@ const Home = ({ sogo, nft, organization }) => {
     <div className="flex justify-center">
       
         <div className="px-5 container">
-          <Row xs={1} md={2} lg={10} className="g-4 py-5">
-            <img src='assets/planeta.png' style={{ width:'100px', height:'52px'}}></img>
-            
-            {/* <h7 style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"left" }}>Participe das ações do TETO através da compra de artes digitais</h7> */}
-            
+          <Row xs={1} md={1} lg={1} className="g-4 py-5">
+            <h7 style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"left" }}>Explore como você pode contribuir para o bem ao seu redor</h7>  
           </Row>
-          <Row xs={1} md={2} lg={10} className="g-4 py-5">
-            <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left", width:'75%' }}>Construa 4 casas em Jardim Gramacho</h1> 
-          </Row>
-          <Row xs={1} md={2} lg={10} className="g-4 py-5">
-            {/* <h1 style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left", width:'10%' }}> {parseInt(itemCount['_hex'], 16)} Items </h1>  */}
-            <h1 style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left", width:'10%' }}> R$ 100.000 Total Sold </h1> 
+          {/* <Row xs={1} md={2} lg={10} className="g-4 py-5">
             <ProgressBar animated style={{textAlign:"right", width:'80%', margin: 'auto' }} now={60} label={`60%`}/>
-          </Row>
-          {/* {funds.length > 0 ?
+          </Row> */}
+          {orgs.length > 0 ?
             <Row xs={1} md={2} lg={4} className="g-4 py-5">
-              {funds.map((fund, idx) => (
+              {orgs.map((org, idx) => (
                 <Col key={idx} className="overflow-hidden">
-                  <Card>
-                    <Card.Img variant="top" src={item.image} />
+                  <Card onClick={navigateToOrg} style={{ cursor: "pointer" }}>
+                    {/* <Card.Img variant="top" src={org.name} /> */}
                     <Card.Body color="secondary">
-                      <Card.Title>{item.name}</Card.Title>
+                      <Card.Title>{org.name}</Card.Title>
                       <Card.Text>
-                        {item.description}
+                        R$ {org.balance.toString(10)} recebido 
+                      </Card.Text>
+                      <Card.Text>
+                        Propósito: {org.purpose} 
+                      </Card.Text>
+                      <Card.Text>
+                        Descrição: {org.description} 
                       </Card.Text>
                     </Card.Body>
-                    <Card.Footer>
-                      <div className='d-grid'>
-                        <Button onClick={() => {}} variant="primary" size="lg">
-                          Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
-                        </Button>
-                      </div>
-                    </Card.Footer>
                   </Card>
                 </Col>
                 
@@ -168,9 +185,9 @@ const Home = ({ sogo, nft, organization }) => {
               </Row>
                 : (
             <main style={{ padding: "1rem 0" }}>
-              <h2>No listed assets</h2>
+              <h2>Error loading organizations</h2>
             </main>
-          )} */}
+          )}i
         </div>
         
     </div>

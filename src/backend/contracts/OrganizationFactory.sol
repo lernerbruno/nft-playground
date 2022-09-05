@@ -11,8 +11,8 @@ contract OrganizationFactory{
         //Do some authentication on who can create org
     }
 
-    function createOrganization(string memory name) public {
-        Organization newOrganization = new Organization(name, orgCount);
+    function createOrganization(string memory name, string memory purpose, string memory description) public {
+        Organization newOrganization = new Organization(orgCount, name, purpose, description);
         organizations.push(newOrganization);
         orgCount ++;
     }
@@ -24,6 +24,18 @@ contract OrganizationFactory{
 
     function getOrganizationName(uint256 _orgIndex) public view returns(string memory) {
         return Organization(payable(getOrganizationContract(_orgIndex))).getName();
+    }
+
+    function getOrganizationPurpose(uint256 _orgIndex) public view returns(string memory) {
+        return Organization(payable(getOrganizationContract(_orgIndex))).getPurpose();
+    }
+
+    function getOrganizationDescription(uint256 _orgIndex) public view returns(string memory) {
+        return Organization(payable(getOrganizationContract(_orgIndex))).getDescription();
+    }
+
+    function getOrganizationBalance(uint256 _orgIndex) public view returns(uint256) {
+        return Organization(payable(getOrganizationContract(_orgIndex))).getBalance();
     }
 
     function getOrgCount() public view returns (uint) {

@@ -6,19 +6,19 @@ import { Navbar, Nav, Button, Container } from 'react-bootstrap'
 
 const Navigation = ({ web3Handler, account }) => {
     return (
-        <Navbar expand="lg" bg="secondary" variant="dark">
+        <Navbar className="color-nav" expand="lg">
             <Container>
                 <Navbar.Brand href="">
-                     Sogo Funders
+                    <img src='assets/logoSogo.png' style={{ width:'100px', height:'52px'}}></img>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/">Explore</Nav.Link>
-                        <Nav.Link as={Link} to="/create">Create Token</Nav.Link>
-                        <Nav.Link as={Link} to="/create-sogo-community">Create Sogo Community</Nav.Link>
-                        <Nav.Link as={Link} to="/my-listed-items">My Listed Items</Nav.Link>
-                        <Nav.Link as={Link} to="/my-purchases">My Purchases</Nav.Link>
+                    <Nav className="me-auto" >
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/">Explore</Nav.Link>
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create">Create Sogo NFT</Nav.Link>
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-sogo-fund">Create Sogo Fund</Nav.Link>
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-organization">Create Organization</Nav.Link>
+                        {/* <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/my-purchases">My Purchases</Nav.Link> */}
                     </Nav>
                     <Nav>
                         {account ? (
@@ -33,7 +33,7 @@ const Navigation = ({ web3Handler, account }) => {
 
                             </Nav.Link>
                         ) : (
-                            <Button onClick={web3Handler} variant="outline-light">Connect Wallet</Button>
+                            <Button style={{color:'#0D0D0D', borderColor:'#0D0D0D'}} onClick={web3Handler} variant="outline-light">Connect Wallet</Button>
                         )}
                     </Nav>
                 </Navbar.Collapse>

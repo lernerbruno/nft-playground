@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ethers } from "ethers"
 import { Row, Col, Card } from 'react-bootstrap'
+import ThreeScene from "./ThreeScene";
 
 function renderSoldItems(items) {
   return (
@@ -26,6 +27,7 @@ export default function MyListedItems({ marketplace, nft, account }) {
   const [loading, setLoading] = useState(true)
   const [listedItems, setListedItems] = useState([])
   const [soldItems, setSoldItems] = useState([])
+
   const loadListedItems = async () => {
     // Load all sold items that the user listed
     const itemCount = await marketplace.itemCount()
@@ -36,9 +38,11 @@ export default function MyListedItems({ marketplace, nft, account }) {
       if (i.seller.toLowerCase() === account) {
         // get uri url from nft contract
         const uri = await nft.tokenURI(i.tokenId)
+        const imagePath = JSON.parse(uri.substring(6))["image"]
         // use uri to fetch the nft metadata stored on ipfs 
-        const response = await fetch(uri)
-        const metadata = await response.json()
+        // const response = await fetch(uri)
+        // const metadata = await response.json()
+        
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(i.itemId)
         // define listed item object
@@ -46,10 +50,11 @@ export default function MyListedItems({ marketplace, nft, account }) {
           totalPrice,
           price: i.price,
           itemId: i.itemId,
-          name: metadata.name,
-          description: metadata.description,
-          image: metadata.image
+          // name: metadata.name,
+          // description: metadata.description,
+          image: `assets/${imagePath}`
         }
+
         listedItems.push(item)
         // Add listed item to sold items array if sold
         if (i.sold) soldItems.push(item)
@@ -59,8 +64,10 @@ export default function MyListedItems({ marketplace, nft, account }) {
     setListedItems(listedItems)
     setSoldItems(soldItems)
   }
+
   useEffect(() => {
     loadListedItems()
+    // Render3D()
   }, [])
   if (loading) return (
     <main style={{ padding: "1rem 0" }}>
@@ -77,6 +84,7 @@ export default function MyListedItems({ marketplace, nft, account }) {
               <Col key={idx} className="overflow-hidden">
                 <Card>
                   <Card.Img variant="top" src={item.image} />
+                  {/* <ThreeScene item={item}/> */}
                   <Card.Footer>{ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
                 </Card>
               </Col>

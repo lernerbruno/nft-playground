@@ -16,18 +16,20 @@ contract Organization {
     event ClaimRejected(string claimId, Claim claim);
 
     string public orgName;
+    string public purpose;
+    string public description;
     uint256 public orgId;
     uint256 balance;
     
     mapping(string => Claim) public pendingClaims; // claim UUID to Claim
     Claim public activeClaim;
     
-    constructor(string memory _orgName, uint _orgId) {
+    constructor(uint _orgId, string memory _orgName, string memory _purpose, string memory _description) {
         orgName = _orgName;
         orgId = _orgId;
+        purpose = _purpose;
+        description = _description;
     }
-
-    // receive() external payable {}
 
     function withdraw(uint _amount) external {
         // require(msg.sender == ongAccount, "caller is not owner");
@@ -43,5 +45,13 @@ contract Organization {
 
     function getName() public view returns (string memory){
         return orgName;
+    }
+
+    function getPurpose() public view returns (string memory){
+        return purpose;
+    }
+
+    function getDescription() public view returns (string memory){
+        return description;
     }
 }

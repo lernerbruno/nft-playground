@@ -8,21 +8,21 @@ async function main() {
   // Get the ContractFactories and Signers
   const SogoNFT = await ethers.getContractFactory("SogoNFT");
   const Sogo = await ethers.getContractFactory("Sogo");
-  const Organization = await ethers.getContractFactory("Organization");
+  const OrganizationFactory = await ethers.getContractFactory("OrganizationFactory");
   
   // Deploy contracts
   const sogo = await Sogo.deploy(1);
   const sogoNFT = await SogoNFT.deploy();
-  const organization = await Organization.deploy("TETO", 1);
+  const organizationFactory = await OrganizationFactory.deploy();
   
   // Save copies of each contracts abi and address to the frontend.
   saveFrontendFiles(sogo , "Sogo");
   saveFrontendFiles(sogoNFT , "SogoNFT");
-  saveFrontendFiles(organization , "Organization");
+  saveFrontendFiles(organizationFactory , "OrganizationFactory");
 
   console.log("SogoNFT address: ", sogoNFT.address);
   console.log("Sogo address: ", sogo.address);
-  console.log("Organization address: ", organization.address);
+  console.log("Organization Factory address: ", organizationFactory.address);
 }
 
 function saveFrontendFiles(contract, name) {
