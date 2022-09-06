@@ -5,10 +5,11 @@ import {
 } from "react-router-dom";
 import Navigation from './Navbar';
 import Home from './Home.js'
-import Create from './Create.js'
+import CreateSogoNFT from './CreateSogoNFT.js'
 import CreateSogoFund from './CreateSogoFund.js'
 import CreateOrganization from './CreateOrganization.js'
 import SocialOrg from './SocialOrg.js'
+import Organizations from './Organizations.js'
 import MyListedItems from './MyListedItems.js'
 import MyPurchases from './MyPurchases.js'
 import SogoAbi from '../contractsData/Sogo.json'
@@ -21,7 +22,6 @@ import { useState } from 'react'
 import { ethers } from "ethers"
 import { useNavigate, useHistory } from "react-router-dom";
 import { Spinner, Col, Row, Card, Button } from 'react-bootstrap'
-
 import './App.css';
 
 function App() {
@@ -259,8 +259,14 @@ function App() {
               <Route path="/" element={
                 <Home sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
               } />
-              <Route path="/create" element={
-                <Create marketplace={sogo} nft={nft} />
+              <Route path="/organizations" element={
+                <Organizations sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
+              }/>
+              <Route path="/organizations/:orgId" element={
+                <SocialOrg organizationFactory={organizationFactory}/>
+              }/>
+              <Route path="/create-sogo-nft" element={
+                <CreateSogoNFT marketplace={sogo} nft={nft} />
               } />
               <Route path="/create-sogo-fund" element={
                 <CreateSogoFund organizationFactory={organizationFactory} sogo={sogo} sogoNFT={nft} />
@@ -273,9 +279,6 @@ function App() {
               } />
               <Route path="/my-purchases" element={
                 <MyPurchases marketplace={sogo} nft={nft} account={account} />
-              } />
-              <Route path="/:orgId" element={
-                <SocialOrg organizationFactory={organizationFactory}/>
               } />
             </Routes>
           )}

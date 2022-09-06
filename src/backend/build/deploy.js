@@ -14,6 +14,11 @@ async function main() {
   const sogo = await Sogo.deploy(1);
   const sogoNFT = await SogoNFT.deploy();
   const organizationFactory = await OrganizationFactory.deploy();
+
+  // Creating test environment
+  
+  const projFuturo = await(await organizationFactory.createOrganization("Projeto Futuro", "Educação de qualidade para todos", "O Projeto Futuro é uma parceria entre o Fundo RJZ e a PUC...")).wait()
+  const teto = await(await organizationFactory.createOrganization("TETO", "Habitação para todos", "O TETO é uma ONG chilena ...")).wait()
   
   // Save copies of each contracts abi and address to the frontend.
   saveFrontendFiles(sogo , "Sogo");

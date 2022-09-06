@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
-import {useNavigate} from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    useNavigate,
+    Routes,
+    Route
+  } from "react-router-dom";
 import { Modal, Row, Col, Card, Button } from 'react-bootstrap'
-import ProgressBar from 'react-bootstrap/ProgressBar';
 
-const Home = ({ sogo, nft, organizationFactory }) => {
+const Organizations = ({ sogo, nft, organizationFactory }) => {
 
   const [loading, setLoading] = useState(true)
   const [orgs, setOrgs] = useState([])
@@ -30,40 +34,6 @@ const Home = ({ sogo, nft, organizationFactory }) => {
     setOrgs(orgs)
   }
 
-  // const loadMarketplaceItems = async () => {
-  //   // Load all unsold items
-  //   const itemCount = await sogo.itemCount()
-  //   console.log(itemCount)
-  //   setItemCount(itemCount)
-    
-    // let items = []
-    // for (let i = 1; i <= itemCount; i++) {
-    //   const item = await sogo.items(i)
-    //   if (!item.sold) {
-    //     // get uri url from nft contract
-    //     const uri = await nft.tokenURI(item.tokenId)
-    //     const imagePath = JSON.parse(uri.substring(6))["image"]
-        
-    //     // use uri to fetch the nft metadata stored on ipfs 
-    //     // const response = await fetch(uri)
-    //     // const metadata = await response.json()
-    //     // get total price of item (item price + fee)
-    //     const totalPrice = await sogo.getTotalPrice(item.itemId)
-    //     // Add item to items array
-    //     items.push({
-    //       totalPrice,
-    //       itemId: item.itemId,
-    //       seller: item.seller,
-    //       // name: metadata.name,
-    //       // description: metadata.description,
-    //       image: `assets/${imagePath}`
-    //     })
-    //   }
-    // }
-    // setLoading(false)
-    // setItems(items)
-  // }
-
   const loadSogoFunds = async () => {
     // Load all unsold items
     // console.log(await sogo.fundsCount())
@@ -82,7 +52,7 @@ const Home = ({ sogo, nft, organizationFactory }) => {
       // const response = await fetch(uri)
       // const metadata = await response.json()
       // get total price of item (item price + fee)
-      const totalDonations = 
+    //   const totalDonations = 
       // Add item to items array
       funds.push({
         fundName: fund.fundName,
@@ -98,42 +68,8 @@ const Home = ({ sogo, nft, organizationFactory }) => {
     setFunds(funds)
   }
 
-  // const loadPage = async () => {
-  //   loadMarketplaceItems()
-  //   loadSocialOrganizations()
-  //   setLoading(false)
-  // }
-
-  // const loadSocialOrganizations = async () => {
-  //   const tokenCount = await socialOrganization.tokenCount()
-  //   let tokens = []
-  //   const orgName = await socialOrganization.name()
-  //   setOrgname(orgName)
-  //   // for (let i = 1; i <= tokenCount; i++) {
-  //   //   const item = await socialOrganization.tokens(i)
-  //   //   if (!item.sold) {
-  //   //     // get uri url from nft contract
-  //   //     const uri = await nft.tokenURI(item.tokenId)
-  //   //     // use uri to fetch the nft metadata stored on ipfs 
-  //   //     const response = await fetch(uri)
-  //   //     const metadata = await response.json()
-  //   //     // get total price of item (item price + fee)
-  //   //     const totalPrice = await marketplace.getTotalPrice(item.itemId)
-  //   //     // Add item to items array
-  //   //     items.push({
-  //   //       totalPrice,
-  //   //       itemId: item.itemId,
-  //   //       seller: item.seller,
-  //   //       name: metadata.name,
-  //   //       description: metadata.description,
-  //   //       image: metadata.image
-  //   //     })
-  //   //   }
-  //   // }
-  // }
-
-  const navigateToOrg = async(e) => {
-    navigate(0)
+  const navigateToOrg = async(e, idx) => {
+    navigate(`/organizations/${idx}`)
   }
 
   // const buyMarketItem = async (item) => {
@@ -164,7 +100,7 @@ const Home = ({ sogo, nft, organizationFactory }) => {
             <Row xs={1} md={2} lg={4} className="g-4 py-5">
               {orgs.map((org, idx) => (
                 <Col key={idx} className="overflow-hidden">
-                  <Card onClick={navigateToOrg} style={{ cursor: "pointer" }}>
+                  <Card onClick={event => navigateToOrg(event, idx)} style={{ cursor: "pointer" }}>
                     {/* <Card.Img variant="top" src={org.name} /> */}
                     <Card.Body color="secondary">
                       <Card.Title>{org.name}</Card.Title>
@@ -189,8 +125,7 @@ const Home = ({ sogo, nft, organizationFactory }) => {
             </main>
           )}
         </div>
-        
     </div>
   );
 }
-export default Home
+export default Organizations
