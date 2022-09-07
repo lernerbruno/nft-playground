@@ -16,11 +16,16 @@ const SocialOrg = ({ organizationFactory }) => {
     const orgPurpose = await organizationFactory.getOrganizationPurpose(orgId)
     const orgDescription = await organizationFactory.getOrganizationDescription(orgId)
     const orgBalance = await organizationFactory.getOrganizationBalance(orgId)
+    const donors = await organizationFactory.getDonors(orgId)
+    const donationsAmounts = await organizationFactory.getDonationsAmounts(orgId)
+    console.log(donors, donationsAmounts)
     setOrg({
         name: orgName,
         purpose: orgPurpose,
         description: orgDescription,
-        balance: orgBalance
+        balance: orgBalance,
+        donors: donors,
+        donationsAmounts: donationsAmounts
     })
   }
 
@@ -45,13 +50,25 @@ const SocialOrg = ({ organizationFactory }) => {
             <h7 style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"left" }}>{org && org.name}</h7>  
             <Col key={0} className="overflow-hidden">
               <h7 style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>Total Arrecadado</h7><br/>
-              <h7 style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"left" }}>R$ {org.balance && org.balance.toString()}</h7> <br/>
+              <h7 style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"left" }}>R$ {org.balance && org.balance.toString()}</h7> <br/>
               <Button className='button-primary' onClick={() => {donate()}} size="sm">
                 Doe e Apoie
               </Button>
             </Col>
-            
           </Row>
+          <h7 style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"left" }}>Doações</h7>  <br/>
+          {org.donors && org.donors.length > 0 ?
+            <div>
+              {org.donors.map((donorAddress, idx) => (
+                 <Row xs={2} md={2} lg={2} className="g-4 py-5">
+                  <h7 style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>{donorAddress}</h7>
+                  <h7 style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>{org.donationsAmounts[idx].toString()}</h7> 
+                 </Row>
+                
+              ))}
+            </div>
+                : (<h2>No donations</h2>)}
+          
         </div>
         
     </div>

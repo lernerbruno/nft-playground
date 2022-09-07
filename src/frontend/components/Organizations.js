@@ -105,7 +105,7 @@ const Organizations = ({ sogo, nft, organizationFactory }) => {
                     <Card.Body color="secondary">
                       <Card.Title>{org.name}</Card.Title>
                       <Card.Text>
-                        R$ {org.balance.toString(10)} recebido 
+                        R$ {org.balance.toString()} recebido 
                       </Card.Text>
                       <Card.Text>
                         Propósito: {org.purpose} 
@@ -118,7 +118,7 @@ const Organizations = ({ sogo, nft, organizationFactory }) => {
                 </Col>
                 
               ))}
-              </Row>
+            </Row>
                 : (
             <main style={{ padding: "1rem 0" }}>
               <h2>No organizations deployed</h2>

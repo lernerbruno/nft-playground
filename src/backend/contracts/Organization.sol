@@ -21,6 +21,8 @@ contract Organization {
     uint256 public orgId;
     uint256 balance;
     mapping(address => uint256) public donations;
+    address[] donors;
+    uint256[] donationsAmounts;
 
     
     mapping(string => Claim) public pendingClaims; // claim UUID to Claim
@@ -57,10 +59,20 @@ contract Organization {
         return description;
     }
 
+    function getDonors() public view returns (address[] memory){
+        return donors;
+    }
+
+    function getDonationsAmounts() public view returns (uint256[] memory){
+        return donationsAmounts;
+    }
+
     function directDonate(uint256 _amount) public payable {
         // require(msg.value >= _amount, "not enough ether to donate this amount");
         // payable(address(this)).transfer(msg.value);
         donations[msg.sender] += _amount;
+        donors.push(msg.sender);
+        donationsAmounts.push(_amount);
         balance += _amount;
     }
 

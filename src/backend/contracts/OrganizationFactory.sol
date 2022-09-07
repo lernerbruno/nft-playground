@@ -37,6 +37,14 @@ contract OrganizationFactory{
         return Organization(payable(getOrganizationContract(_orgIndex))).getBalance();
     }
 
+    function getDonors(uint256 _orgIndex) public view returns(address[] memory) {
+        return Organization(payable(getOrganizationContract(_orgIndex))).getDonors();
+    }
+
+    function getDonationsAmounts(uint256 _orgIndex) public view returns(uint256[] memory) {
+        return Organization(payable(getOrganizationContract(_orgIndex))).getDonationsAmounts();
+    }
+
     function getOrgCount() public view returns (uint) {
         return orgCount;
     }
