@@ -23,6 +23,10 @@ const SocialOrg = ({ organizationFactory }) => {
         balance: orgBalance
     })
   }
+
+  const donate = async() => {
+    await(await organizationFactory.donateToOrganization(orgId, ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })).wait()
+  }
   
   useEffect(() => {
     loadOrg()
@@ -37,8 +41,16 @@ const SocialOrg = ({ organizationFactory }) => {
     <div className="flex justify-center">
       
         <div className="px-5 container">
-          <Row xs={1} md={1} lg={1} className="g-4 py-5">
+          <Row xs={2} md={2} lg={2} className="g-4 py-5">
             <h7 style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"left" }}>{org && org.name}</h7>  
+            <Col key={0} className="overflow-hidden">
+              <h7 style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>Total Arrecadado</h7><br/>
+              <h7 style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"left" }}>R$ {org.balance && org.balance.toString()}</h7> <br/>
+              <Button className='button-primary' onClick={() => {donate()}} size="sm">
+                Doe e Apoie
+              </Button>
+            </Col>
+            
           </Row>
         </div>
         

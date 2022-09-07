@@ -20,6 +20,8 @@ contract Organization {
     string public description;
     uint256 public orgId;
     uint256 balance;
+    mapping(address => uint256) public donations;
+
     
     mapping(string => Claim) public pendingClaims; // claim UUID to Claim
     Claim public activeClaim;
@@ -54,4 +56,25 @@ contract Organization {
     function getDescription() public view returns (string memory){
         return description;
     }
+
+    function directDonate(uint256 _amount) public payable {
+        // require(msg.value >= _amount, "not enough ether to donate this amount");
+        // payable(address(this)).transfer(msg.value);
+        donations[msg.sender] += _amount;
+        balance += _amount;
+    }
+
+    // function getPrice() public view returns(uint256){
+    //     AggregatorV3Interface priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
+    //     (,int256 answer,,,) = priceFeed.latestRoundData();
+    //      // ETH/USD rate in 18 digit 
+    //      return uint256(answer * 10000000000);
+    // }
+
+    // function getConversionRate(uint256 ethAmount) public view returns (uint256){
+    //     uint256 ethPrice = getPrice();
+    //     uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1000000000000000000;
+    //     // the actual ETH/USD conversation rate, after adjusting the extra 0s.
+    //     return ethAmountInUsd;
+    // }
 }

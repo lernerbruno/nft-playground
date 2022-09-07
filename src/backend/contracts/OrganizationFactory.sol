@@ -21,7 +21,6 @@ contract OrganizationFactory{
         return address(organizations[_orgIndex]);
     }
 
-
     function getOrganizationName(uint256 _orgIndex) public view returns(string memory) {
         return Organization(payable(getOrganizationContract(_orgIndex))).getName();
     }
@@ -45,4 +44,8 @@ contract OrganizationFactory{
     function getOrganizations() public view returns (Organization[] memory) {
         return organizations;
     }
+
+    function donateToOrganization(uint256 _orgIndex, uint256 _amount) public payable {
+        return Organization(payable(getOrganizationContract(_orgIndex))).directDonate(_amount);
+    } 
 }
