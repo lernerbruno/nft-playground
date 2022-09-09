@@ -263,10 +263,10 @@ function App() {
                 <Organizations sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
               }/>
               <Route path="/organizations/:orgId" element={
-                <SocialOrg organizationFactory={organizationFactory}/>
+                <SocialOrg nft={nft} sogo={sogo} organizationFactory={organizationFactory}/>
               }/>
               <Route path="/create-sogo-nft" element={
-                <CreateSogoNFT marketplace={sogo} nft={nft} />
+                <CreateSogoNFT sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
               } />
               <Route path="/create-sogo-fund" element={
                 <CreateSogoFund organizationFactory={organizationFactory} sogo={sogo} sogoNFT={nft} />

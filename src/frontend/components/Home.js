@@ -97,13 +97,7 @@ const Home = ({ sogo, nft, organizationFactory }) => {
     setLoading(false)
     setFunds(funds)
   }
-
-  // const loadPage = async () => {
-  //   loadMarketplaceItems()
-  //   loadSocialOrganizations()
-  //   setLoading(false)
-  // }
-
+  
   // const loadSocialOrganizations = async () => {
   //   const tokenCount = await socialOrganization.tokenCount()
   //   let tokens = []
@@ -155,39 +149,11 @@ const Home = ({ sogo, nft, organizationFactory }) => {
       
         <div className="px-5 container">
           <Row xs={1} md={1} lg={1} className="g-4 py-5">
-            <h7 style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"left" }}>Explore como você pode contribuir para o bem ao seu redor</h7>  
+            <h7 style={{ fontSize: "6rem", fontFamily: 'Poppins', textAlign:"center", color:'#F6EFEA' }}>a evolução do investimento social</h7>  
           </Row>
           {/* <Row xs={1} md={2} lg={10} className="g-4 py-5">
             <ProgressBar animated style={{textAlign:"right", width:'80%', margin: 'auto' }} now={60} label={`60%`}/>
           </Row> */}
-          {orgs.length > 0 ?
-            <Row xs={1} md={2} lg={4} className="g-4 py-5">
-              {orgs.map((org, idx) => (
-                <Col key={idx} className="overflow-hidden">
-                  <Card onClick={navigateToOrg} style={{ cursor: "pointer" }}>
-                    {/* <Card.Img variant="top" src={org.name} /> */}
-                    <Card.Body color="secondary">
-                      <Card.Title>{org.name}</Card.Title>
-                      <Card.Text>
-                        R$ {org.balance.toString(10)} recebido 
-                      </Card.Text>
-                      <Card.Text>
-                        Propósito: {org.purpose} 
-                      </Card.Text>
-                      <Card.Text>
-                        Descrição: {org.description} 
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                
-              ))}
-              </Row>
-                : (
-            <main style={{ padding: "1rem 0" }}>
-              <h2>No organizations deployed</h2>
-            </main>
-          )}
         </div>
         
     </div>

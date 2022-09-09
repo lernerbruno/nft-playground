@@ -4,10 +4,11 @@ import { ethers } from "ethers"
 import { Modal, Row, Col, Card, Button } from 'react-bootstrap'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
-const SocialOrg = ({ organizationFactory }) => {
+const SocialOrg = ({ sogo, nft, organizationFactory }) => {
 
   const [loading, setLoading] = useState(true)
   const [org, setOrg] = useState({})
+  const [sogoTokens, setSogoTokens] = useState([])
   const [orgCount, setOrgCount] = useState(0)
   let { orgId } = useParams();
 
@@ -18,15 +19,58 @@ const SocialOrg = ({ organizationFactory }) => {
     const orgBalance = await organizationFactory.getOrganizationBalance(orgId)
     const donors = await organizationFactory.getDonors(orgId)
     const donationsAmounts = await organizationFactory.getDonationsAmounts(orgId)
-    console.log(donors, donationsAmounts)
+    const orgAddress = await organizationFactory.getOrganizationContract(orgId)
+    
     setOrg({
         name: orgName,
         purpose: orgPurpose,
         description: orgDescription,
         balance: orgBalance,
         donors: donors,
-        donationsAmounts: donationsAmounts
+        donationsAmounts: donationsAmounts,
+        address: orgAddress
     })
+  }
+
+  const loadSogoArts = async () => {
+    // Load all unsold items 
+    console.log(org.address)
+    const orgTokens = await sogo.getOrgTokens(org.address)
+    let sogoTokens = []
+    for (let i = 1; i <= orgTokens.length; i++) {
+      const item = await sogo.sogoArts(i)
+      if (!item.sold) {
+        // get uri url from nft contract
+        
+        const uri = await nft.tokenURI(item.tokenId)
+        
+        // const imagePath = JSON.parse(uri.substring(6))["image"]
+        // console.log(imagePath)
+        // use uri to fetch the nft metadata stored on ipfs 
+        // const response = await fetch(uri)
+        // const metadata = await response.json()
+        // get total price of item (item price + fee)
+        console.log(item)
+        const totalPrice = await sogo.getTotalPrice(item.SogoArtId)
+        console.log(totalPrice)
+        // Add item to items array 
+
+        sogoTokens.push({
+          price: totalPrice.toString(),
+          itemId: item.itemId,
+          seller: item.seller,
+          // name: metadata.name,
+          // description: metadata.description,
+          image: 'assets/Untitled_Artwork.jpg'
+        })
+      }
+    }
+    setSogoTokens(sogoTokens)
+  }
+
+  const buySogoArt = async (item) => {
+    await (await sogo.purchaseSogoArt(item.itemId, { value: item.totalPrice })).wait()
+    loadSogoArts()
   }
 
   const donate = async() => {
@@ -35,6 +79,7 @@ const SocialOrg = ({ organizationFactory }) => {
   
   useEffect(() => {
     loadOrg()
+    loadSogoArts()
     setLoading(false)
   }, [])
   if (loading) return (
@@ -66,8 +111,29 @@ const SocialOrg = ({ organizationFactory }) => {
                  </Row>
                 
               ))}
-            </div>
+            </div> 
+
                 : (<h2>No donations</h2>)}
+          <h7 style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"left" }}>Sogo Arts</h7>  <br/>
+          {sogoTokens && sogoTokens.length > 0 ?
+            <Row xs={1} md={2} lg={4} className="g-4 py-5">
+              {sogoTokens.map((sogoToken, idx) => (
+                <Col key={idx} className="overflow-hidden">
+                  <Card style={{ cursor: "pointer" }}>
+                    {/* <Card.Img variant="top" src={org.name} /> */}
+                    <Card.Body color="primary">
+                      <Card.Title>{sogoToken.SogoArtId}</Card.Title>
+                      <Card.Img variant="top" src={sogoToken.image} />
+                      <Card.Text>
+                        {sogoToken.price}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                
+              ))}  
+          </Row>
+                : (<h2>No Sogo Arts</h2>)}
           
         </div>
         
