@@ -1,14 +1,16 @@
 import {
-    Link
+    Link,
+    useNavigate
 } from "react-router-dom";
 import { Navbar, Nav, Button, Container } from 'react-bootstrap'
 // import market from './market.png'
 
 const Navigation = ({ web3Handler, account }) => {
+    const navigate = useNavigate();
     return (
         <Navbar className="color-nav" expand="lg">
             <Container>
-                <Navbar.Brand href="">
+                <Navbar.Brand onClick={() => {navigate('/')}} style={{cursor:'pointer'}} href="">
                     <img src='assets/logoSogo.png' style={{ width:'100px', height:'52px'}}></img>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
