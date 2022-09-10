@@ -117,7 +117,7 @@ contract Sogo is ReentrancyGuard {
         );
     }
 
-    function purchaseSogoArt(uint _itemId) external payable nonReentrant {
+    function purchaseSogoArt(uint _itemId) public payable nonReentrant {
         uint _totalPrice = getTotalPrice(_itemId);
         SogoArt storage item = sogoArts[_itemId];
         require(_itemId > 0 && _itemId <= sogoArtCount, "Sogo Art doesn't exist");

@@ -97,9 +97,6 @@ const SocialCampaign = ({ marketplace, nft, socialProject }) => {
         <div className="px-5 container">
           <Row xs={1} md={2} lg={10} className="g-4 py-5">
             <img src='assets/planeta.png' style={{ width:'100px', height:'52px'}}></img>
-            
-            {/* <h7 style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"left" }}>Participe das ações do TETO através da compra de artes digitais</h7> */}
-            
           </Row>
           <Row xs={1} md={2} lg={10} className="g-4 py-5">
             <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left", width:'75%' }}>Construa 4 casas em Jardim Gramacho</h1> 

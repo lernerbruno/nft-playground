@@ -25,10 +25,17 @@
   border-color:#0D0D0D;
 }
 
+.normal-txt {
+  color:#F6EFEA;
+  border-color:#F6EFEA;
+}
+
+
 .button-primary {
   color:#0D0D0D;
   background-color:#BCAAE2;
   border-color:#BCAAE2;
+  text-align: "right"
 }
 
 @media (prefers-reduced-motion: no-preference) {

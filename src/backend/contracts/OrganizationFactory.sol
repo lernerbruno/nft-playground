@@ -49,6 +49,14 @@ contract OrganizationFactory{
         return orgCount;
     }
 
+    function getTotalDonated() public view returns (uint) {
+        uint totalDonated;
+        for (uint _orgIndex=0; _orgIndex<orgCount; _orgIndex++) {
+            totalDonated += Organization(payable(getOrganizationContract(_orgIndex))).getBalance();
+        }
+        return totalDonated;
+    }
+
     function getOrganizations() public view returns (Organization[] memory) {
         return organizations;
     }

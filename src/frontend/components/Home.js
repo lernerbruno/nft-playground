@@ -9,11 +9,15 @@ const Home = ({ sogo, nft, organizationFactory }) => {
   const [orgs, setOrgs] = useState([])
   const [funds, setFunds] = useState([])
   const [orgCount, setOrgCount] = useState(0)
+  const [totalDonated, setTotalDonated] = useState(0)
   const navigate = useNavigate();
 
   const loadOrganizations = async () => {
     const orgCount = await organizationFactory.getOrgCount()
-    setOrgCount(orgCount)
+    setOrgCount(orgCount.toString())
+    const totalDonated = await organizationFactory.getTotalDonated()
+    console.log(totalDonated.toString()/10e17)
+    setTotalDonated(totalDonated)
     let orgs = []
     for (let i = 0; i < orgCount; i++) {
       const orgName = await organizationFactory.getOrganizationName(i)
@@ -28,6 +32,7 @@ const Home = ({ sogo, nft, organizationFactory }) => {
       })
     }
     setOrgs(orgs)
+    setLoading(false)
   }
 
   // const loadMarketplaceItems = async () => {
@@ -97,7 +102,7 @@ const Home = ({ sogo, nft, organizationFactory }) => {
     setLoading(false)
     setFunds(funds)
   }
-  
+
   // const loadSocialOrganizations = async () => {
   //   const tokenCount = await socialOrganization.tokenCount()
   //   let tokens = []
@@ -126,8 +131,11 @@ const Home = ({ sogo, nft, organizationFactory }) => {
   //   // }
   // }
 
-  const navigateToOrg = async(e) => {
-    navigate(0)
+  const navigateToOrganizations = async () => {
+    navigate('/organizations')
+  }
+  const navigateToCreateOrg = async () => {
+    navigate('/create-organization')
   }
 
   // const buyMarketItem = async (item) => {
@@ -149,8 +157,34 @@ const Home = ({ sogo, nft, organizationFactory }) => {
       
         <div className="px-5 container">
           <Row xs={1} md={1} lg={1} className="g-4 py-5">
-            <h7 style={{ fontSize: "6rem", fontFamily: 'Poppins', textAlign:"center", color:'#F6EFEA' }}>a evolução do investimento social</h7>  
+            <h6 className="normal-txt" style={{ fontSize: "6rem", fontFamily: 'Poppins', textAlign:"center", color:'#F6EFEA' }}>a evolução do investimento social</h6>  
           </Row>
+          <Row xs={1} md={1} lg={1} className="g-4 py-5">
+            <h3 className="normal-txt" style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"center" }}>{totalDonated.toString()/10e17} ETH doados para {orgCount} projetos sociais</h3>
+          </Row>
+          <Row xs={2} md={2} lg={2} className="g-2 py-5">
+              <Col key={0} className="overflow-hidden">
+                <Card onClick={() => navigateToOrganizations()} style={{ cursor: "pointer" }}>
+                  <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Explore Projetos</Card.Title>
+                  <Card.Body color="secondary">  
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>
+                      Vamos descobrir o que está sendo feito para nosso país prosperar, e vamos fazer parte disso!
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col key={1} className="overflow-hidden">
+                <Card onClick={() => navigateToCreateOrg()} style={{ cursor: "pointer" }}>
+                <Card.Title style={{ fontSize: "2rem", fontFamily: 'Poppins', textAlign:"center" }}>Publique seu Projeto</Card.Title>
+                  <Card.Body color="secondary">
+                    <Card.Text style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>
+                      Publique sua organização social na nossa plataforma para receber recursos e atenção da sua comunidade
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          
           {/* <Row xs={1} md={2} lg={10} className="g-4 py-5">
             <ProgressBar animated style={{textAlign:"right", width:'80%', margin: 'auto' }} now={60} label={`60%`}/>
           </Row> */}
