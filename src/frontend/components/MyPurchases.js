@@ -49,7 +49,7 @@ export default function MyPurchases({ sogo, nft, account }) {
       {purchases.length > 0 ?
         <div className="px-5 container">
           <Row xs={1} md={1} lg={1} className="g-4 py-5">
-            <h1 style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left", color: '#F6EFEA' }}>Esse é sua exposição de contribuições sociais</h1>
+            <h1 className='normal-txt' style={{ fontSize: "5rem", fontFamily: 'Poppins', textAlign:"left" }}>Esse é sua exposição de contribuições sociais</h1>
           </Row>
           <Row xs={1} md={2} lg={4} className="g-4 py-5">
             {purchases.map((item, idx) => (

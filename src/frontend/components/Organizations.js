@@ -91,7 +91,7 @@ const Organizations = ({ sogo, nft, organizationFactory }) => {
       
         <div className="px-5 container">
           <Row xs={1} md={1} lg={1} className="g-4 py-5">
-            <h6 className="normal-txt" style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"left", color:'#F6EFEA' }}>Explore como você pode contribuir para o bem ao seu redor</h6>  
+            <h6 className="normal-txt" style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"left"}}>Explore como você pode contribuir para o bem ao seu redor</h6>  
           </Row>
           {/* <Row xs={1} md={2} lg={10} className="g-4 py-5">
             <ProgressBar animated style={{textAlign:"right", width:'80%', margin: 'auto' }} now={60} label={`60%`}/>

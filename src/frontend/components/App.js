@@ -73,9 +73,12 @@ function App() {
                 {/* <Spinner animation="border" style={{ display: 'flex' }} />
                 <p className='mx-3 my-0'>Awaiting Metamask Connection...</p> */}
               <div className="px-2 container">
-                <Row xs={1} md={1} lg={1} className="g-2 py-5">
-                  <h1 className="normal-txt" style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"center" }}>Seja a mudança que você quer ver no mundo</h1>
-                </Row>
+                <h1 className="normal-txt" style={{ fontSize: "80px", fontFamily: 'Aktiv Grotesk Ex', textAlign:"left", width:'70%' }}>A evolução do investimento social</h1>
+                <h1 className="normal-txt" style={{ fontSize: "22px", fontFamily: 'Aktiv Grotesk Ex', textAlign:"left", width:'55%' }}>Doe para projetos sociais e acompanhe seu impacto em tempo real, com facilidade e transparência.</h1>
+                <div style={{display: 'flex', alignItems: 'left', justifyContent: 'left', paddingTop: '20px'}}>
+                  <Button style={{color:'#0D0D0D', borderColor:'#B197FC', backgroundColor: '#B197FC', align:'left'}} onClick={web3Handler}>Comece agora</Button>
+                </div>
+                
               </div>
             </div>
           ) : (
