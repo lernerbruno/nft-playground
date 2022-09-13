@@ -19,6 +19,7 @@ async function main() {
   
   const projFuturo = await(await organizationFactory.createOrganization("Projeto Futuro", "Educação de qualidade para todos", "O Projeto Futuro é uma parceria entre o Fundo RJZ e a PUC...")).wait()
   const teto = await(await organizationFactory.createOrganization("TETO", "Habitação para todos", "O TETO é uma ONG chilena ...")).wait()
+  const redeFunkSocial = await(await organizationFactory.createOrganization("Rede Funk Social", "Inclusão Social", "Inclusão social através do desenvolvimento artístico de jovens em comunidades carentes")).wait()
   
   // Save copies of each contracts abi and address to the frontend.
   saveFrontendFiles(sogo , "Sogo");

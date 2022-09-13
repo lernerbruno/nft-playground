@@ -20,7 +20,7 @@ const Navigation = ({ web3Handler, account }) => {
                         <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-sogo-nft">Create Sogo NFT</Nav.Link>
                         <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-sogo-fund">Create Sogo Fund</Nav.Link>
                         <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-organization">Create Organization</Nav.Link>
-                        {/* <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/my-purchases">My Purchases</Nav.Link> */}
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/my-purchases">My Purchases</Nav.Link>
                     </Nav>
                     <Nav>
                         {account ? (

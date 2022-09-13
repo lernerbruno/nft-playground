@@ -16,7 +16,6 @@ const Home = ({ sogo, nft, organizationFactory }) => {
     const orgCount = await organizationFactory.getOrgCount()
     setOrgCount(orgCount.toString())
     const totalDonated = await organizationFactory.getTotalDonated()
-    console.log(totalDonated.toString()/10e17)
     setTotalDonated(totalDonated)
     let orgs = []
     for (let i = 0; i < orgCount; i++) {

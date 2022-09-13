@@ -74,14 +74,12 @@ const SocialOrg = ({ sogo, nft, organizationFactory }) => {
   }
 
   const buySogoArt = async (sogoToken) => {
-    console.log(ethers.utils.parseEther('1'))
-    console.log(ethers.utils.parseEther('0.2323'))
-    console.log(ethers.utils.parseEther((sogoToken.totalPrice/10e17).toString()))
-    await (await sogo.purchaseSogoArt(sogoToken.SogoArtId, { value: ethers.utils.parseEther('0.2323') })).wait()
-    // loadSogoArts()
+    await (await sogo.purchaseSogoArt(sogoToken.itemId, { value: sogoToken.totalPrice })).wait()
+    loadSogoArts()
   }
 
   const donate = async() => {
+    console.log(ethers.utils.parseEther('1.01'))
     await(await organizationFactory.donateToOrganization(orgId, ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })).wait()
     loadOrg()
   }

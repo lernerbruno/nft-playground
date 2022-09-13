@@ -102,7 +102,7 @@ function App() {
                 <CreateOrganization organizationFactory={organizationFactory} />
               } />
               <Route path="/my-purchases" element={
-                <MyPurchases marketplace={sogo} nft={nft} account={account} />
+                <MyPurchases sogo={sogo} nft={nft} account={account} />
               } />
             </Routes>
           )}
