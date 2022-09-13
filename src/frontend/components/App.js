@@ -70,23 +70,23 @@ function App() {
         <div>
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-              {/* <Spinner animation="border" style={{ display: 'flex' }} />
-              <p className='mx-3 my-0'>Awaiting Metamask Connection...</p> */}
-            <div className="px-2 container">
-              <Row xs={1} md={1} lg={1} className="g-2 py-5">
-                <h1 className="normal-txt" style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"center" }}>Seja a mudança que você quer ver no mundo</h1>
-              </Row>
+                {/* <Spinner animation="border" style={{ display: 'flex' }} />
+                <p className='mx-3 my-0'>Awaiting Metamask Connection...</p> */}
+              <div className="px-2 container">
+                <Row xs={1} md={1} lg={1} className="g-2 py-5">
+                  <h1 className="normal-txt" style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"center" }}>Seja a mudança que você quer ver no mundo</h1>
+                </Row>
+              </div>
             </div>
-        </div>
           ) : (
             <Routes>
               <Route path="/" element={
                 <Home sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
               } />
-              <Route path="/organizations" element={
+              <Route path="/projects" element={
                 <Organizations sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
               }/>
-              <Route path="/organizations/:orgId" element={
+              <Route path="/projects/:orgId" element={
                 <SocialOrg nft={nft} sogo={sogo} organizationFactory={organizationFactory}/>
               }/>
               <Route path="/create-sogo-nft" element={
@@ -98,7 +98,7 @@ function App() {
               <Route path="/my-listed-items" element={
                 <MyListedItems marketplace={sogo} nft={nft} account={account} />
               } />
-              <Route path="/create-organization" element={
+              <Route path="/create-project" element={
                 <CreateOrganization organizationFactory={organizationFactory} />
               } />
               <Route path="/my-purchases" element={

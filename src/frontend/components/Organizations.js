@@ -69,7 +69,7 @@ const Organizations = ({ sogo, nft, organizationFactory }) => {
   }
 
   const navigateToOrg = async(e, idx) => {
-    navigate(`/organizations/${idx}`)
+    navigate(`/projects/${idx}`)
   }
 
   // const buyMarketItem = async (item) => {

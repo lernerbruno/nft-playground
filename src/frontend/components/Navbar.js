@@ -16,10 +16,10 @@ const Navigation = ({ web3Handler, account }) => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto" >
-                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/organizations">Explore Organizations</Nav.Link>
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/projects">Explore Projetcts</Nav.Link>
                         <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-sogo-nft">Create Sogo NFT</Nav.Link>
-                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-sogo-fund">Create Sogo Fund</Nav.Link>
-                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-organization">Create Organization</Nav.Link>
+                        {/* <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-sogo-fund">Create Sogo Fund</Nav.Link> */}
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-project">Create Project</Nav.Link>
                         <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/my-purchases">My Purchases</Nav.Link>
                     </Nav>
                     <Nav>
