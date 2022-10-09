@@ -8,7 +8,7 @@ import Home from './Home.js'
 import CreateSogoNFT from './CreateSogoNFT.js'
 import CreateSogoFund from './CreateSogoFund.js'
 import CreateOrganization from './CreateOrganization.js'
-import SocialOrg from './SocialOrg.js'
+import SocialProject from './SocialProject.js'
 import Organizations from './Organizations.js'
 import MyListedItems from './MyListedItems.js'
 import MyPurchases from './MyPurchases.js'
@@ -90,7 +90,7 @@ function App() {
                 <Organizations sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
               }/>
               <Route path="/projects/:orgId" element={
-                <SocialOrg nft={nft} sogo={sogo} organizationFactory={organizationFactory}/>
+                <SocialProject nft={nft} sogo={sogo} organizationFactory={organizationFactory}/>
               }/>
               <Route path="/create-sogo-nft" element={
                 <CreateSogoNFT sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
