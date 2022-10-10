@@ -7,7 +7,7 @@ export default function MyPurchases({ sogo, nft, account }) {
   const [purchases, setPurchases] = useState([])
   const loadPurchasedItems = async () => {
     // Fetch purchased items from marketplace by quering Offered events with the buyer set as the user
-    const filter =  sogo.filters.SogoArtBought(null,null,null,null,null,null,account)
+    const filter =  sogo.filters.SocialTokenBought(null,null,null,null,null,null,account)
     const results = await sogo.queryFilter(filter)
     //Fetch metadata of each nft and add that to listedItem object.
     const purchases = await Promise.all(results.map(async i => {
@@ -21,12 +21,12 @@ export default function MyPurchases({ sogo, nft, account }) {
       // const metadata = await response.json()
       console.log(i)
       // get total price of item (item price + fee)
-      const totalPrice = await sogo.getTotalPrice(i.sogoArtId)
+      const totalPrice = await sogo.getTotalPrice(i.itemId)
       // define listed item object
       let purchasedItem = {
         totalPrice,
         price: i.price,
-        itemId: i.sogoArtId,
+        itemId: i.itemId,
         name: i.name,
         // description: metadata.description,
         image: i.image

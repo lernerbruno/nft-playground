@@ -19,8 +19,7 @@ import SocialProjectFactoryAddress from '../contractsData/SocialProjectFactory-a
 import SocialProjectFactoryAbi from '../contractsData/SocialProjectFactory.json'
 import { useState } from 'react'
 import { ethers } from "ethers"
-import { useNavigate, useHistory } from "react-router-dom";
-import { Spinner, Col, Row, Card, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import './App.css';
 
 function App() {
@@ -32,8 +31,6 @@ function App() {
   
   // MetaMask Login/Connect
   const web3Handler = async () => {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    setAccount(accounts[0])
     // Get provider from Metamask
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
@@ -42,6 +39,16 @@ function App() {
     window.ethereum.on('chainChanged', (chainId) => {
       window.location.reload();
     })
+    loadContracts(signer)
+  }
+
+  const connectWallet = async() => {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    setAccount(accounts[0])
+    // Get provider from Metamask
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     window.ethereum.on('accountsChanged', async function (accounts) {
       setAccount(accounts[0])
@@ -49,6 +56,7 @@ function App() {
     })
     loadContracts(signer)
   }
+
   const loadContracts = async (signer) => {
     // Get deployed copies of contracts
     const sogo = new ethers.Contract(SogoAddress.address, SogoAbi.abi, signer)
@@ -64,7 +72,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <>
-          <Navigation web3Handler={web3Handler} account={account} />
+          <Navigation connectWallet={connectWallet} account={account} />
         </>
         <div>
           {loading ? (
@@ -83,12 +91,12 @@ function App() {
           ) : (
             <Routes>
               <Route path="/" element={
-                <Home sogo={sogo} nft={nft} socialProjectFactory={socialProjectFactory} />
+                <Home socialProjectFactory={socialProjectFactory} />
               } />
               <Route path="/projects" element={
                 <SocialProjects socialProjectFactory={socialProjectFactory} />
               }/>
-              <Route path="/projects/:orgId" element={
+              <Route path="/projects/:projId" element={
                 <SocialProject nft={nft} sogo={sogo} socialProjectFactory={socialProjectFactory}/>
               }/>
               <Route path="/create-sogo-nft" element={

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
 import { Row, Col, Card } from 'react-bootstrap'
 
@@ -58,7 +58,7 @@ export default function MyListedItems({ marketplace, nft, account }) {
         // Add listed item to sold items array if sold
         if (i.sold) soldItems.push(item)
       }
-      
+
     }
     setLoading(false)
     setListedItems(listedItems)
@@ -67,7 +67,6 @@ export default function MyListedItems({ marketplace, nft, account }) {
 
   useEffect(() => {
     loadListedItems()
-    // Render3D()
   }, [])
   if (loading) return (
     <main style={{ padding: "1rem 0" }}>

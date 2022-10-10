@@ -1,5 +1,5 @@
-node_modules/
-src/frontend/contractsData/
-src/backend/artifacts/
-src/backend/cache/
+node_modules/*
+src/frontend/contractsData/*
+src/backend/artifacts/*
+src/backend/cache/*
 package-lock.json

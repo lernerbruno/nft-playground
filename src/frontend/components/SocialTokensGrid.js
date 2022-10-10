@@ -2,10 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { withRouter, useParams } from 'react-router-dom'; 
 import { ethers } from "ethers"
 import { Modal, Row, Col, Card, Button } from 'react-bootstrap'
-import ProgressBar from 'react-bootstrap/ProgressBar';
 import { Tab, Tabs, Box } from '@mui/material'
 
-const ProjectBanner = ({ socialProjectFactory }) => {
+const SocialTokensGrid = ({ socialProjectFactory }) => {
   const [allValues, setAllValues] = useState({
     loading: true,
     proj: {},
@@ -69,31 +68,23 @@ const ProjectBanner = ({ socialProjectFactory }) => {
                         <Tab label="Metas" value={1}/>
                     </Tabs>
                 </Box>
-                <Box sx={{ padding: 1 }}>
+                <Box sx={{ padding: 2 }}>
                     {tabIndex === 0 && (
-                      <div>
-                        <Row xs={2} md={2} lg={2} className="g-1 py-2">
-                          <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>R$ {allValues.proj.balance && (allValues.proj.balance.toString()/10e17) * 1400} arrecadados</h6> <br/>
-                          <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"right" }}>28%</h6> <br/>
-                        </Row>
-                        <Row xs={1} md={1} lg={1} className="g-1 py-2">
-                          <ProgressBar style={{width:'100%',color:'grey'}} now={28}/>
-                        </Row>
-                      </div>
+                    <Row xs={2} md={2} lg={2} className="g-4 py-5">
+                        <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>{allValues.proj.balance && allValues.proj.balance.toString()/10e17} ETH arrecadados</h6> <br/>
+                        <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"right" }}>28%</h6> <br/>
+                    </Row>
                     )}
                     {tabIndex === 1 && (
                     <Row xs={2} md={2} lg={2} className="g-4 py-5">
                     </Row>
                     )}
                 </Box>
-                <Box sx={{ padding: 1 }}>
-                  <Button className='button-primary' style={{float:"right", width:'100%'}} onClick={() => {donate()}} size="sm">
-                      Apoie
-                  </Button>
-                </Box>
-                
+                <Button className='button-primary' style={{float:"right"}} onClick={() => {donate()}} size="sm">
+                    Doe e Apoie
+                </Button>
             </Col>
         </Row>
   );
 }
-export default ProjectBanner
+export default SocialTokensGrid

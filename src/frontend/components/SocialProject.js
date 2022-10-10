@@ -1,72 +1,67 @@
-import { useState, useEffect, useRef } from 'react'
-import { withRouter, useParams } from 'react-router-dom'; 
-import { ethers } from "ethers"
-import { Modal, Row, Col, Card, Button } from 'react-bootstrap'
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import { useState, useEffect} from 'react'
+import {useParams } from 'react-router-dom'; 
+import { Row, Col, Card, Button } from 'react-bootstrap'
 import ProjectBanner from './ProjectBanner';
 import { Tab, Tabs, Box } from '@mui/material'
 
 const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
   const [allValues, setAllValues] = useState({
     loading: true,
-    org: {},
-    sogoTokens: [],
+    proj: {},
+    socialTokens: [],
     confirmPassword: '',
     donationCount: 0
   });
-  let { orgId } = useParams();
+  let { projId } = useParams();
   const [tabIndex, setTabIndex] = useState(0);
 
   const handleTabChange = (event, newTabIndex) => {
     setTabIndex(newTabIndex);
   };
-  const loadOrg = async() => {
-    const orgName = await socialProjectFactory.getProjectName(orgId)
-    const orgPurpose = await socialProjectFactory.getProjectPurpose(orgId)
-    const orgDescription = await socialProjectFactory.getProjectDescription(orgId)
-    const orgBalance = await socialProjectFactory.getProjectBalance(orgId)
-    const donors = await socialProjectFactory.getDonors(orgId)
-    const donationsAmounts = await socialProjectFactory.getDonationsAmounts(orgId)
-    const orgAddress = await socialProjectFactory.getProjectContract(orgId)
+
+  const loadSocialProject = async() => {
+    const projName = await socialProjectFactory.getProjectName(projId)
+    const projPurpose = await socialProjectFactory.getProjectPurpose(projId)
+    const projDescription = await socialProjectFactory.getProjectDescription(projId)
+    const projBalance = await socialProjectFactory.getProjectBalance(projId)
+    const donors = await socialProjectFactory.getDonors(projId)
+    const donationsAmounts = await socialProjectFactory.getDonationsAmounts(projId)
+    const projAddress = await socialProjectFactory.getProjectContract(projId)
     
-    const _org = {
-      name: orgName,
-      purpose: orgPurpose,
-      description: orgDescription,
-      balance: orgBalance,
+    const _proj = {
+      name: projName,
+      purpose: projPurpose,
+      description: projDescription,
+      balance: projBalance,
       donors: donors,
       donationsAmounts: donationsAmounts,
-      address: orgAddress
+      address: projAddress
     }
-
-    loadSogoArts(_org)
+    
+    loadSocialTokens(_proj)
+    
   }
 
-  const loadSogoArts = async (_org) => {
+  const loadSocialTokens = async (_proj) => {
     // Load all unsold items 
-    const orgTokens = await sogo.getProjectTokens(_org.address)
-    let sogoTokens = []
-    for (let i = 1; i <= orgTokens.length; i++) {
-      const item = await sogo.sogoArts(i)
+    const projTokens = await sogo.getProjectTokens(_proj.address)
+    let socialTokens = []
+    for (let i = 1; i <= projTokens.length; i++) {
+      const item = await sogo.socialTokens(i)
       if (!item.sold) {
-        // get uri url from nft contract
-        
-        const uri = await nft.tokenURI(item.tokenId)
+        const uri = await nft.tokenURI(item.itemId)
         const name = JSON.parse(uri)["name"]
         const description = JSON.parse(uri)["description"]
-        // console.log(imagePath)
         // use uri to fetch the nft metadata stored on ipfs 
         // const response = await fetch(uri)
         // const metadata = await response.json()
-        // get total price of item (item price + fee)
-        const totalPrice = await sogo.getTotalPrice(item.SogoArtId)
-        // Add item to items array 
-
-        sogoTokens.push({
+        
+        const totalPrice = await sogo.getTotalPrice(item.itemId)
+        socialTokens.push({
           totalPrice,
           name: name,
           description: description,
-          itemId: item.SogoArtId,
+          itemId: item.itemId,
           seller: item.seller,
           // name: metadata.name,
           // description: metadata.description,
@@ -74,24 +69,18 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
         })
       }
     }
-    setAllValues(prevAllValues => ({...prevAllValues, org: _org}))
-    setAllValues(prevAllValues => ({...prevAllValues, sogoTokens: sogoTokens}))
+    setAllValues(prevAllValues => ({...prevAllValues, proj: _proj}))
+    setAllValues(prevAllValues => ({...prevAllValues, socialTokens: socialTokens}))
     setAllValues(prevAllValues => ({...prevAllValues, loading: false})) 
   }
 
-  const buySogoArt = async (sogoToken) => {
-    await (await sogo.purchaseSogoArt(sogoToken.itemId, { value: sogoToken.totalPrice })).wait()
-    loadSogoArts()
-  }
-
-  const donate = async() => {
-    console.log(ethers.utils.parseEther('1.01'))
-    await(await socialProjectFactory.donateToProject(orgId, ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })).wait()
-    loadOrg()
+  const buySocialToken = async (socialToken) => {
+    await (await sogo.purchaseSocialToken(socialToken.itemId, { value: socialToken.totalPrice })).wait()
+    loadSocialTokens()
   }
   
   useEffect(() => {
-    loadOrg()
+    loadSocialProject()
     }, [])
   if (allValues.loading) return (
     <main style={{ padding: "1rem 0" }}>
@@ -132,44 +121,52 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
                   </Card>
               </Row>
               )}
-              {tabIndex === 0 && allValues.sogoTokens && allValues.sogoTokens.length > 0 && (
+              {tabIndex === 0 && allValues.socialTokens && allValues.socialTokens.length > 0 && (
+                <div>
                 <Row xs={1} md={2} lg={4} className="g-4 py-5">
-                  {allValues.sogoTokens.map((sogoToken, idx) => {
+                  <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>Explore doações e recompensas</h6>
+                </Row>
+                <Row xs={1} md={2} lg={4} className="g-4 py-5">
+                  {allValues.socialTokens.map((socialToken, idx) => {
                     return (
                     <Col key={idx} className="overflow-hidden">
-                      <Card onClick={() => {buySogoArt(sogoToken)}} style={{ cursor: "pointer" }}>
-                        <Card.Title>{sogoToken.name}</Card.Title>
+                      <Card onClick={() => {buySocialToken(socialToken)}} style={{ cursor: "pointer" }}>
+                        <Card.Title className="card-title">Doe R${(socialToken.totalPrice/10e17)*1400*10e17}  </Card.Title>
                         <Card.Body color="primary">
-                          <Card.Img src={sogoToken.image} style={{ width:'200px', height:'200px'}}/>
-                          <Card.Text>{sogoToken.description}</Card.Text>
+                          <Card.Img src={socialToken.image} style={{ width:'200px', height:'200px'}}/>
+                          <Card.Text>{socialToken.description}</Card.Text>
                         </Card.Body>
                         <Card.Footer>
-                          <Card.Text variant='primary'> Compre por {sogoToken.totalPrice/10e17} ETH </Card.Text>
+                          <Row xs={2} md={2} lg={2}>
+                            <Button className='button-primary' style={{width:'70%'}}><Card.Text variant='primary'> Comprar Token </Card.Text></Button>
+                          </Row>
                         </Card.Footer>
                       </Card>
                     </Col>
                     
                   )})}  
-              </Row>
+                </Row>
+                </div>
+                
               )}
               
-              {tabIndex === 3 && allValues.org.donors && allValues.org.donors.length > 0 &&
+              {tabIndex === 3 && allValues.proj.donors && allValues.proj.donors.length > 0 &&
                 <div>
                   <h6 className="normal-txt" style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"left" }}>Doações</h6>  <br/>
                   <Row xs={2} md={2} lg={2} className="g-4 py-2">
                     <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>Endereço do Doador</h6>
                     <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"right" }}>Valor doado</h6> 
                   </Row>
-                  {allValues.org.donors.map((donorAddress, idx) => (
+                  {allValues.proj.donors.map((donorAddress, idx) => (
                      <Row xs={2} md={2} lg={2} className="g-4 py-2">
                       <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>{donorAddress}</h6>
-                      <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"right" }}>{allValues.org.donationsAmounts[idx].toString()/10e17} ETH</h6> 
+                      <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"right" }}>{allValues.proj.donationsAmounts[idx].toString()/10e17} ETH</h6> 
                      </Row>
                     
                   ))}
                 </div> 
               }
-              {tabIndex === 3 && allValues.org.donors && allValues.org.donors.length == 0 &&
+              {tabIndex === 3 && allValues.proj.donors && allValues.proj.donors.length == 0 &&
                 <div>
                   No donation
                 </div>

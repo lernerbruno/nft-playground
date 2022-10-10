@@ -69,7 +69,7 @@ const CreateSogoNFT = ({ sogo, nft, socialProjectFactory }) => {
     await(await nft.setApprovalForAll(sogo.address, true)).wait()
     // add nft to marketplace
     const listingPrice = ethers.utils.parseEther(price.toString())
-    await(await sogo.makeSogoToken(nft.address, id, listingPrice, orgAddress)).wait()
+    await(await sogo.makeSocialToken(nft.address, id, listingPrice, orgAddress)).wait()
   }
 
   useEffect(() => {

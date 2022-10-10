@@ -15,10 +15,10 @@ contract SocialProject {
     event ClaimApproved(string claimId, Claim claim);
     event ClaimRejected(string claimId, Claim claim);
 
-    string public orgName;
+    string public projName;
     string public purpose;
     string public description;
-    uint256 public orgId;
+    uint256 public projId;
     uint256 balance;
     mapping(address => uint256) public donations;
     address[] donors;
@@ -28,9 +28,9 @@ contract SocialProject {
     mapping(string => Claim) public pendingClaims; // claim UUID to Claim
     Claim public activeClaim;
     
-    constructor(uint _orgId, string memory _orgName, string memory _purpose, string memory _description) {
-        orgName = _orgName;
-        orgId = _orgId;
+    constructor(uint _projId, string memory _projName, string memory _purpose, string memory _description) {
+        projName = _projName;
+        projId = _projId;
         purpose = _purpose;
         description = _description;
     }
@@ -48,7 +48,7 @@ contract SocialProject {
     }
 
     function getName() public view returns (string memory){
-        return orgName;
+        return projName;
     }
 
     function getPurpose() public view returns (string memory){
@@ -68,7 +68,7 @@ contract SocialProject {
     }
 
     function directDonate(uint256 _amount) public payable {
-        require(msg.value >= _amount, "not enough ether to donate this amount");
+        // require(msg.value >= _amount, "not enough ether to donate this amount");
         // payable(address(this)).transfer(msg.value);
         donations[msg.sender] += _amount;
         donors.push(msg.sender);

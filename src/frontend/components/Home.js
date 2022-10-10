@@ -9,41 +9,25 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const Home = ({ sogo, nft, socialProjectFactory }) => {
+const Home = ({socialProjectFactory }) => {
 
   const [loading, setLoading] = useState(true)
-  const [orgs, setOrgs] = useState([])
-  const [funds, setFunds] = useState([])
-  const [orgCount, setOrgCount] = useState(0)
+  const [projCount, setProjCount] = useState(0)
   const [totalDonated, setTotalDonated] = useState(0)
   const navigate = useNavigate();
 
   const loadSocialProjects = async () => {
-    const orgCount = await socialProjectFactory.getSocialProjectsCount()
-    setOrgCount(orgCount.toString())
+    const projCount = await socialProjectFactory.getSocialProjectsCount()
+    setProjCount(projCount.toString())
     const totalDonated = await socialProjectFactory.getTotalDonated()
     setTotalDonated(totalDonated)
-    let orgs = []
-    for (let i = 0; i < orgCount; i++) {
-      const orgName = await socialProjectFactory.getProjectName(i)
-      const orgPurpose = await socialProjectFactory.getProjectPurpose(i)
-      const orgDescription = await socialProjectFactory.getProjectDescription(i)
-      const orgBalance = await socialProjectFactory.getProjectBalance(i)
-      orgs.push({
-        name: orgName,
-        purpose: orgPurpose,
-        description: orgDescription,
-        balance: orgBalance
-      })
-    }
-    setOrgs(orgs)
     setLoading(false)
   }
 
   const navigateToSocialProjects = async () => {
     navigate('/projects')
   }
-  const navigateToCreateOrg = async () => {
+  const navigateToCreateProject = async () => {
     navigate('/create-project')
   }
 
@@ -64,7 +48,7 @@ const Home = ({ sogo, nft, socialProjectFactory }) => {
             <h6 className="normal-txt" style={{ fontSize: "6rem", fontFamily: 'Poppins', textAlign:"center",}}>a evolução do investimento social</h6>  
           </Row>
           <Row xs={1} md={1} lg={1} className="g-4 py-5">
-            <h3 className="normal-txt" style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"center" }}>{totalDonated.toString()/10e17} ETH doados para {orgCount} projetos sociais</h3>
+            <h3 className="normal-txt" style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"center" }}>{totalDonated.toString()/10e17} ETH doados para {projCount} projetos sociais</h3>
           </Row>
           <Row xs={2} md={2} lg={2} className="g-2 py-5">
               <Col key={0} className="overflow-hidden" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
@@ -80,13 +64,13 @@ const Home = ({ sogo, nft, socialProjectFactory }) => {
                 </Card>
               </Col>
               <Col key={1} className="overflow-hidden" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <Card sx={{ maxWidth: 500, minHeight: 200 }} onClick={() => navigateToCreateOrg()} style={{ cursor: "pointer" }}>
+                <Card sx={{ maxWidth: 500, minHeight: 200 }} onClick={() => navigateToCreateProject()} style={{ cursor: "pointer" }}>
                   <CardContent>
                     <Typography sx={{ fontSize: '2rem' }} color="text.primary" gutterBottom>
                       Publique seu Projeto
                     </Typography>
                     <Typography sx={{ fontSize: '1rem' }} color="text.secondary" gutterBottom>
-                    Publique sua organização social na nossa plataforma para receber recursos e atenção da sua comunidade
+                    Publique seu projeto social na nossa plataforma para receber recursos e atenção da sua comunidade
                     </Typography>
                   </CardContent>
                 </Card>

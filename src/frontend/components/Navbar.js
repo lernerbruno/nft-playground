@@ -5,7 +5,7 @@ import {
 import { Navbar, Nav, Button, Container } from 'react-bootstrap'
 // import market from './market.png'
 
-const Navigation = ({ web3Handler, account }) => {
+const Navigation = ({ connectWallet, account }) => {
     const navigate = useNavigate();
     return (
         <Navbar className="color-nav" expand="lg">
@@ -35,7 +35,7 @@ const Navigation = ({ web3Handler, account }) => {
 
                             </Nav.Link>
                         ) : (
-                            <Button style={{color:'#0D0D0D', borderColor:'#0D0D0D'}} onClick={web3Handler} variant="outline-light">Connect Wallet</Button>
+                            <Button style={{color:'#0D0D0D', borderColor:'#0D0D0D'}} onClick={connectWallet} variant="outline-light">Connect Wallet</Button>
                         )}
                     </Nav>
                 </Navbar.Collapse>

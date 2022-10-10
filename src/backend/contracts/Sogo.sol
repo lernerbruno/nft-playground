@@ -65,7 +65,7 @@ contract Sogo is ReentrancyGuard {
     }
 
     // Publish social token for selling in Sogo 
-    function makeSogoToken(IERC721 _nft, uint _tokenId, uint _price, address payable socialProject) external nonReentrant {
+    function makeSocialToken(IERC721 _nft, uint _tokenId, uint _price, address payable socialProject) external nonReentrant {
         require(_price > 0, "Price must be greater than zero");
         // increment itemCount
         socialTokensCount ++;
@@ -98,7 +98,7 @@ contract Sogo is ReentrancyGuard {
         );
     }
 
-    function purchaseSogoArt(uint _itemId) public payable nonReentrant {
+    function purchaseSocialToken(uint _itemId) public payable nonReentrant {
         uint _totalPrice = getTotalPrice(_itemId);
         SocialToken storage item = socialTokens[_itemId];
         require(_itemId > 0 && _itemId <= socialTokensCount, "Social Token doesn't exist");

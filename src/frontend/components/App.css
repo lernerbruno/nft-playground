@@ -25,6 +25,10 @@
   border-color:#0D0D0D;
 }
 
+.card-title {
+  background-color: #EAEDF1;
+}
+
 .normal-txt {
   color:#212529;
   border-color:#212529;
