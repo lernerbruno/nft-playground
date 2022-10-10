@@ -1,2 +1,2 @@
-# nft-playground
-Playing around
+# Sogo
+Coming soon
