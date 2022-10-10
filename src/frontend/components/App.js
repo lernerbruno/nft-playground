@@ -6,7 +6,6 @@ import {
 import Navigation from './Navbar';
 import Home from './Home.js'
 import CreateSogoNFT from './CreateSogoNFT.js'
-import CreateSogoFund from './CreateSogoFund.js'
 import CreateSocialProject from './CreateSocialProject.js'
 import SocialProject from './SocialProject.js'
 import SocialProjects from './SocialProjects.js'
@@ -94,9 +93,6 @@ function App() {
               }/>
               <Route path="/create-sogo-nft" element={
                 <CreateSogoNFT sogo={sogo} nft={nft} socialProjectFactory={socialProjectFactory} />
-              } />
-              <Route path="/create-sogo-fund" element={
-                <CreateSogoFund socialProjectFactory={socialProjectFactory} sogo={sogo} sogoNFT={nft} />
               } />
               <Route path="/my-listed-items" element={
                 <MyListedItems marketplace={sogo} nft={nft} account={account} />
