@@ -9,7 +9,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-const Home = ({ sogo, nft, organizationFactory }) => {
+const Home = ({ sogo, nft, socialProjectFactory }) => {
 
   const [loading, setLoading] = useState(true)
   const [orgs, setOrgs] = useState([])
@@ -18,17 +18,17 @@ const Home = ({ sogo, nft, organizationFactory }) => {
   const [totalDonated, setTotalDonated] = useState(0)
   const navigate = useNavigate();
 
-  const loadOrganizations = async () => {
-    const orgCount = await organizationFactory.getOrgCount()
+  const loadSocialProjects = async () => {
+    const orgCount = await socialProjectFactory.getSocialProjectsCount()
     setOrgCount(orgCount.toString())
-    const totalDonated = await organizationFactory.getTotalDonated()
+    const totalDonated = await socialProjectFactory.getTotalDonated()
     setTotalDonated(totalDonated)
     let orgs = []
     for (let i = 0; i < orgCount; i++) {
-      const orgName = await organizationFactory.getOrganizationName(i)
-      const orgPurpose = await organizationFactory.getOrganizationPurpose(i)
-      const orgDescription = await organizationFactory.getOrganizationDescription(i)
-      const orgBalance = await organizationFactory.getOrganizationBalance(i)
+      const orgName = await socialProjectFactory.getProjectName(i)
+      const orgPurpose = await socialProjectFactory.getProjectPurpose(i)
+      const orgDescription = await socialProjectFactory.getProjectDescription(i)
+      const orgBalance = await socialProjectFactory.getProjectBalance(i)
       orgs.push({
         name: orgName,
         purpose: orgPurpose,
@@ -40,7 +40,7 @@ const Home = ({ sogo, nft, organizationFactory }) => {
     setLoading(false)
   }
 
-  const navigateToOrganizations = async () => {
+  const navigateToSocialProjects = async () => {
     navigate('/projects')
   }
   const navigateToCreateOrg = async () => {
@@ -48,7 +48,7 @@ const Home = ({ sogo, nft, organizationFactory }) => {
   }
 
   useEffect(() => {
-    loadOrganizations();
+    loadSocialProjects();
     setLoading(false);
   }, [])
   if (loading) return (
@@ -68,7 +68,7 @@ const Home = ({ sogo, nft, organizationFactory }) => {
           </Row>
           <Row xs={2} md={2} lg={2} className="g-2 py-5">
               <Col key={0} className="overflow-hidden" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <Card sx={{ maxWidth: 500, minHeight: 200 }} onClick={() => navigateToOrganizations()} style={{ cursor: "pointer" }}>
+                <Card sx={{ maxWidth: 500, minHeight: 200 }} onClick={() => navigateToSocialProjects()} style={{ cursor: "pointer" }}>
                   <CardContent>
                     <Typography sx={{ fontSize: '2rem' }} color="text.primary" gutterBottom>
                         Explore Projetos

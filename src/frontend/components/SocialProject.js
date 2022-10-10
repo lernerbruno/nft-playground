@@ -6,7 +6,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import ProjectBanner from './ProjectBanner';
 import { Tab, Tabs, Box } from '@mui/material'
 
-const SocialProject = ({ sogo, nft, organizationFactory }) => {
+const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
   const [allValues, setAllValues] = useState({
     loading: true,
     org: {},
@@ -21,13 +21,13 @@ const SocialProject = ({ sogo, nft, organizationFactory }) => {
     setTabIndex(newTabIndex);
   };
   const loadOrg = async() => {
-    const orgName = await organizationFactory.getOrganizationName(orgId)
-    const orgPurpose = await organizationFactory.getOrganizationPurpose(orgId)
-    const orgDescription = await organizationFactory.getOrganizationDescription(orgId)
-    const orgBalance = await organizationFactory.getOrganizationBalance(orgId)
-    const donors = await organizationFactory.getDonors(orgId)
-    const donationsAmounts = await organizationFactory.getDonationsAmounts(orgId)
-    const orgAddress = await organizationFactory.getOrganizationContract(orgId)
+    const orgName = await socialProjectFactory.getProjectName(orgId)
+    const orgPurpose = await socialProjectFactory.getProjectPurpose(orgId)
+    const orgDescription = await socialProjectFactory.getProjectDescription(orgId)
+    const orgBalance = await socialProjectFactory.getProjectBalance(orgId)
+    const donors = await socialProjectFactory.getDonors(orgId)
+    const donationsAmounts = await socialProjectFactory.getDonationsAmounts(orgId)
+    const orgAddress = await socialProjectFactory.getProjectContract(orgId)
     
     const _org = {
       name: orgName,
@@ -44,7 +44,7 @@ const SocialProject = ({ sogo, nft, organizationFactory }) => {
 
   const loadSogoArts = async (_org) => {
     // Load all unsold items 
-    const orgTokens = await sogo.getOrgTokens(_org.address)
+    const orgTokens = await sogo.getProjectTokens(_org.address)
     let sogoTokens = []
     for (let i = 1; i <= orgTokens.length; i++) {
       const item = await sogo.sogoArts(i)
@@ -86,7 +86,7 @@ const SocialProject = ({ sogo, nft, organizationFactory }) => {
 
   const donate = async() => {
     console.log(ethers.utils.parseEther('1.01'))
-    await(await organizationFactory.donateToOrganization(orgId, ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })).wait()
+    await(await socialProjectFactory.donateToProject(orgId, ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })).wait()
     loadOrg()
   }
   
@@ -103,7 +103,7 @@ const SocialProject = ({ sogo, nft, organizationFactory }) => {
     <div className="flex justify-center">
       
         <div className="px-5 container">
-          <ProjectBanner organizationFactory={organizationFactory}/>
+          <ProjectBanner socialProjectFactory={socialProjectFactory}/>
           <Tabs value={tabIndex} onChange={handleTabChange}>
               <Tab label="Como apoiar" value={0}/>
               <Tab label="O Projeto" value={1}/>

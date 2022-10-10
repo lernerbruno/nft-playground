@@ -21,7 +21,6 @@
 //         uint tokenId;
 //         uint price;
 //         address payable seller;
-//         address payable organization;
 //         bool sold;
 //     }
 

@@ -4,7 +4,7 @@ import { Row, Form, Button } from 'react-bootstrap'
 import { create as ipfsHttpClient } from 'ipfs-http-client'
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
-const CreateSogoNFT = ({ sogo, nft, organizationFactory }) => {
+const CreateSogoNFT = ({ sogo, nft, socialProjectFactory }) => {
   const [image, setImage] = useState('')
   const [price, setPrice] = useState(null)
   const [name, setName] = useState('')
@@ -12,15 +12,15 @@ const CreateSogoNFT = ({ sogo, nft, organizationFactory }) => {
   const [orgAddress, setOrgAddress] = useState('')
   const [orgs, setOrgs] = useState([])
 
-  const loadOrganizations = async () => {
-    const orgCount = await organizationFactory.getOrgCount()
+  const loadSocialProjects = async () => {
+    const orgCount = await socialProjectFactory.getSocialProjectsCount()
     let orgs = []
     for (let i = 0; i < orgCount; i++) {
-      const orgName = await organizationFactory.getOrganizationName(i)
-      const orgPurpose = await organizationFactory.getOrganizationPurpose(i)
-      const orgDescription = await organizationFactory.getOrganizationDescription(i)
-      const orgBalance = await organizationFactory.getOrganizationBalance(i)
-      const orgAddress = await organizationFactory.getOrganizationContract(i)
+      const orgName = await socialProjectFactory.getProjectName(i)
+      const orgPurpose = await socialProjectFactory.getProjectPurpose(i)
+      const orgDescription = await socialProjectFactory.getProjectDescription(i)
+      const orgBalance = await socialProjectFactory.getProjectBalance(i)
+      const orgAddress = await socialProjectFactory.getProjectContract(i)
 
       orgs.push({
         name: orgName,
@@ -73,7 +73,7 @@ const CreateSogoNFT = ({ sogo, nft, organizationFactory }) => {
   }
 
   useEffect(() => {
-    loadOrganizations();
+    loadSocialProjects();
   }, [])
   return (
     <div className="container-fluid mt-5">

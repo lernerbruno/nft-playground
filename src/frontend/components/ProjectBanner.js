@@ -5,7 +5,7 @@ import { Modal, Row, Col, Card, Button } from 'react-bootstrap'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { Tab, Tabs, Box } from '@mui/material'
 
-const ProjectBanner = ({ organizationFactory }) => {
+const ProjectBanner = ({ socialProjectFactory }) => {
   const [allValues, setAllValues] = useState({
     loading: true,
     org: {},
@@ -21,13 +21,13 @@ const ProjectBanner = ({ organizationFactory }) => {
   };
 
   const loadOrg = async() => {
-    const orgName = await organizationFactory.getOrganizationName(orgId)
-    const orgPurpose = await organizationFactory.getOrganizationPurpose(orgId)
-    const orgDescription = await organizationFactory.getOrganizationDescription(orgId)
-    const orgBalance = await organizationFactory.getOrganizationBalance(orgId)
-    const donors = await organizationFactory.getDonors(orgId)
-    const donationsAmounts = await organizationFactory.getDonationsAmounts(orgId)
-    const orgAddress = await organizationFactory.getOrganizationContract(orgId)
+    const orgName = await socialProjectFactory.getProjectName(orgId)
+    const orgPurpose = await socialProjectFactory.getProjectPurpose(orgId)
+    const orgDescription = await socialProjectFactory.getProjectDescription(orgId)
+    const orgBalance = await socialProjectFactory.getProjectBalance(orgId)
+    const donors = await socialProjectFactory.getDonors(orgId)
+    const donationsAmounts = await socialProjectFactory.getDonationsAmounts(orgId)
+    const orgAddress = await socialProjectFactory.getProjectContract(orgId)
     
     const _org = {
       name: orgName,
@@ -45,7 +45,7 @@ const ProjectBanner = ({ organizationFactory }) => {
 
   const donate = async() => {
     console.log(ethers.utils.parseEther('1.01'))
-    await(await organizationFactory.donateToOrganization(orgId, ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })).wait()
+    await(await socialProjectFactory.donateToProject(orgId, ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })).wait()
     loadOrg()
   }
   

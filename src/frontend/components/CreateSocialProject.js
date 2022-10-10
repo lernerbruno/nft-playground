@@ -3,20 +3,20 @@ import { Row, Form, Button } from 'react-bootstrap'
 import {useNavigate} from 'react-router-dom';
 
 
-const CreateOrganization = ({ organizationFactory }) => {
+const CreateSocialProject = ({ socialProjectFactory }) => {
     const [purpose, setPurpose] = useState('')
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const navigate = useNavigate();
 
-    const DeployOrganization = async () => {
+    const DeploySocialProject = async () => {
         if (!purpose || !name  || !description) return
         try{
-            await(await organizationFactory.createOrganization(name, purpose, description)).wait()
+            await(await socialProjectFactory.createSocialProject(name, purpose, description)).wait()
             // TODO: Create a success modal or something
             navigate('/');
         } catch(error) {
-            console.log("Error creating Organization: ", error)
+            console.log("Error creating SocialProject: ", error)
         }
     }
 
@@ -31,8 +31,8 @@ const CreateOrganization = ({ organizationFactory }) => {
                 <Form.Control onChange={(e) => setDescription(e.target.value)} size="lg" required as="textarea" placeholder="Description" />
                 
                 <div className="d-grid px-0">
-                <Button onClick={DeployOrganization} variant="primary" size="lg">
-                    Deploy Organization
+                <Button onClick={DeploySocialProject} variant="primary" size="lg">
+                    Deploy Social Project
                 </Button>
                 </div>
             </Row>
@@ -43,4 +43,4 @@ const CreateOrganization = ({ organizationFactory }) => {
     );
 }
 
-export default CreateOrganization
+export default CreateSocialProject

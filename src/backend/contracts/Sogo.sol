@@ -10,7 +10,7 @@ struct SocialToken {
     IERC721 nft;
     uint price;
     uint tokenId;
-    address payable beneficiaryNgo;
+    address payable socialProject;
     address payable seller;
     bool sold;
 }
@@ -22,8 +22,8 @@ contract Sogo is ReentrancyGuard {
     uint public socialTokensCount;
     // nft seller token count
     mapping(address => uint) public sellerTokenCount;
-    // beneficiary org to tokens
-    mapping(address => SocialToken[]) public orgTokens;
+    // social project address to social tokens
+    mapping(address => SocialToken[]) public socialProjectTokens;
     // itemId -> socialToken
     mapping(uint => SocialToken) public socialTokens;
 
@@ -45,7 +45,7 @@ contract Sogo is ReentrancyGuard {
         address indexed nft,
         uint tokenId,
         uint price,
-        address indexed beneficiaryNgo,
+        address indexed socialProject,
         address indexed seller
     );
 
@@ -54,7 +54,7 @@ contract Sogo is ReentrancyGuard {
         address nft,
         uint tokenId,
         uint price,
-        address indexed beneficiaryNgo,
+        address indexed socialProject,
         address indexed seller,
         address indexed buyer
     );
@@ -65,7 +65,7 @@ contract Sogo is ReentrancyGuard {
     }
 
     // Publish social token for selling in Sogo 
-    function makeSogoToken(IERC721 _nft, uint _tokenId, uint _price, address payable beneficiaryNgo) external nonReentrant {
+    function makeSogoToken(IERC721 _nft, uint _tokenId, uint _price, address payable socialProject) external nonReentrant {
         require(_price > 0, "Price must be greater than zero");
         // increment itemCount
         socialTokensCount ++;
@@ -79,13 +79,13 @@ contract Sogo is ReentrancyGuard {
             _nft,
             _tokenId,
             _price,
-            beneficiaryNgo,
+            socialProject,
             payable(msg.sender),
             false
         );
         // add new item to items mapping
         socialTokens[socialTokensCount] = newSocialToken;
-        orgTokens[beneficiaryNgo].push(newSocialToken);
+        socialProjectTokens[socialProject].push(newSocialToken);
         
         // emit Offered event
         emit SocialTokenOffered(
@@ -93,7 +93,7 @@ contract Sogo is ReentrancyGuard {
             address(_nft),
             _tokenId,
             _price,
-            beneficiaryNgo,
+            socialProject,
             msg.sender
         );
     }
@@ -101,32 +101,36 @@ contract Sogo is ReentrancyGuard {
     function purchaseSogoArt(uint _itemId) public payable nonReentrant {
         uint _totalPrice = getTotalPrice(_itemId);
         SocialToken storage item = socialTokens[_itemId];
-        require(_itemId > 0 && _itemId <= socialTokensCount, "Sogo Art doesn't exist");
-        require(msg.value >= _totalPrice, "not enough ether to cover item price and market fee");
+        require(_itemId > 0 && _itemId <= socialTokensCount, "Social Token doesn't exist");
         require(!item.sold, "item already sold");
+        require(msg.value >= _totalPrice, "not enough ether to cover item price and market fee");
+
         // pay seller and feeAccount
-        item.seller.transfer(item.price);
-        item.beneficiaryNgo.transfer(item.price);
-        feeAccount.transfer(_totalPrice - item.price);
-        // update item to sold
+        uint sellerShare = uint(item.price/10);
+        uint projectShare = uint(item.price*9/10);
+        item.seller.transfer(sellerShare);
+        item.socialProject.transfer(projectShare);
+        feeAccount.transfer(_totalPrice - (sellerShare + projectShare));
+        
+        // update item to sold and transfer to new owner
         item.sold = true;
-        // transfer nft to buyer
         item.nft.transferFrom(address(this), msg.sender, item.tokenId);
+        
         // emit Bought event
         emit SocialTokenBought(
             _itemId,
             address(item.nft),
             item.tokenId,
             item.price,
-            item.beneficiaryNgo,
+            item.socialProject,
             item.seller,
             msg.sender
         );
     }
 
-    function getOrgTokens(address orgAddress) view public returns (SocialToken[] memory) {
-        return orgTokens[orgAddress];
-    }
+    function getProjectTokens(address socialProjectAddress) view public returns (SocialToken[] memory) {
+        return socialProjectTokens[socialProjectAddress];
+    }   
 
     function getTotalPrice(uint _itemId) view public returns(uint){
         return((socialTokens[_itemId].price*(100 + feePercent))/100);

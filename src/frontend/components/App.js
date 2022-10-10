@@ -7,17 +7,17 @@ import Navigation from './Navbar';
 import Home from './Home.js'
 import CreateSogoNFT from './CreateSogoNFT.js'
 import CreateSogoFund from './CreateSogoFund.js'
-import CreateOrganization from './CreateOrganization.js'
+import CreateSocialProject from './CreateSocialProject.js'
 import SocialProject from './SocialProject.js'
-import Organizations from './Organizations.js'
+import SocialProjects from './SocialProjects.js'
 import MyListedItems from './MyListedItems.js'
 import MyPurchases from './MyPurchases.js'
 import SogoAbi from '../contractsData/Sogo.json'
 import SogoAddress from '../contractsData/Sogo-address.json'
 import SogoNFTAbi from '../contractsData/SogoNFT.json'
 import SogoNFTAddress from '../contractsData/SogoNFT-address.json'
-import OrganizationFactoryAddress from '../contractsData/OrganizationFactory-address.json'
-import OrganizationFactoryAbi from '../contractsData/OrganizationFactory.json'
+import SocialProjectFactoryAddress from '../contractsData/SocialProjectFactory-address.json'
+import SocialProjectFactoryAbi from '../contractsData/SocialProjectFactory.json'
 import { useState } from 'react'
 import { ethers } from "ethers"
 import { useNavigate, useHistory } from "react-router-dom";
@@ -29,7 +29,7 @@ function App() {
   const [account, setAccount] = useState(null)
   const [nft, setNFT] = useState({})
   const [sogo, setSogo] = useState({})
-  const [organizationFactory, setOrganizationFactory] = useState({})
+  const [socialProjectFactory, setSocialProjectFactory] = useState({})
   
   // MetaMask Login/Connect
   const web3Handler = async () => {
@@ -56,8 +56,8 @@ function App() {
     setSogo(sogo)
     const nft = new ethers.Contract(SogoNFTAddress.address, SogoNFTAbi.abi, signer)
     setNFT(nft)
-    const organizationFactory = new ethers.Contract(OrganizationFactoryAddress.address, OrganizationFactoryAbi.abi, signer)
-    setOrganizationFactory(organizationFactory)
+    const socialProjectFactory = new ethers.Contract(SocialProjectFactoryAddress.address, SocialProjectFactoryAbi.abi, signer)
+    setSocialProjectFactory(socialProjectFactory)
     setLoading(false)
   }
 
@@ -84,25 +84,25 @@ function App() {
           ) : (
             <Routes>
               <Route path="/" element={
-                <Home sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
+                <Home sogo={sogo} nft={nft} socialProjectFactory={socialProjectFactory} />
               } />
               <Route path="/projects" element={
-                <Organizations sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
+                <SocialProjects socialProjectFactory={socialProjectFactory} />
               }/>
               <Route path="/projects/:orgId" element={
-                <SocialProject nft={nft} sogo={sogo} organizationFactory={organizationFactory}/>
+                <SocialProject nft={nft} sogo={sogo} socialProjectFactory={socialProjectFactory}/>
               }/>
               <Route path="/create-sogo-nft" element={
-                <CreateSogoNFT sogo={sogo} nft={nft} organizationFactory={organizationFactory} />
+                <CreateSogoNFT sogo={sogo} nft={nft} socialProjectFactory={socialProjectFactory} />
               } />
               <Route path="/create-sogo-fund" element={
-                <CreateSogoFund organizationFactory={organizationFactory} sogo={sogo} sogoNFT={nft} />
+                <CreateSogoFund socialProjectFactory={socialProjectFactory} sogo={sogo} sogoNFT={nft} />
               } />
               <Route path="/my-listed-items" element={
                 <MyListedItems marketplace={sogo} nft={nft} account={account} />
               } />
               <Route path="/create-project" element={
-                <CreateOrganization organizationFactory={organizationFactory} />
+                <CreateSocialProject socialProjectFactory={socialProjectFactory} />
               } />
               <Route path="/my-purchases" element={
                 <MyPurchases sogo={sogo} nft={nft} account={account} />

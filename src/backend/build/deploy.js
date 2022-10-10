@@ -8,27 +8,27 @@ async function main() {
   // Get the ContractFactories and Signers
   const SogoNFT = await ethers.getContractFactory("SogoNFT");
   const Sogo = await ethers.getContractFactory("Sogo");
-  const OrganizationFactory = await ethers.getContractFactory("OrganizationFactory");
+  const SocialProjectFactory = await ethers.getContractFactory("SocialProjectFactory");
   
   // Deploy contracts
   const sogo = await Sogo.deploy(1);
   const sogoNFT = await SogoNFT.deploy();
-  const organizationFactory = await OrganizationFactory.deploy();
+  const socialProjectFactory = await SocialProjectFactory.deploy();
 
   // Creating test environment
   
-  const projFuturo = await(await organizationFactory.createOrganization("Projeto Futuro", "Educação de qualidade para todos", "O Projeto Futuro é uma parceria entre o Fundo RJZ e a PUC...")).wait()
-  const teto = await(await organizationFactory.createOrganization("TETO", "Habitação para todos", "O TETO é uma ONG chilena ...")).wait()
-  const redeFunkSocial = await(await organizationFactory.createOrganization("Rede Funk Social", "Inclusão Social", "Inclusão social através do desenvolvimento artístico de jovens em comunidades carentes")).wait()
+  const projFuturo = await(await socialProjectFactory.createSocialProject("Projeto Futuro", "Educação de qualidade para todos", "O Projeto Futuro é uma parceria entre o Fundo RJZ e a PUC...")).wait()
+  const teto = await(await socialProjectFactory.createSocialProject("TETO", "Habitação para todos", "O TETO é uma ONG chilena ...")).wait()
+  const redeFunkSocial = await(await socialProjectFactory.createSocialProject("Rede Funk Social", "Inclusão Social", "Inclusão social através do desenvolvimento artístico de jovens em comunidades carentes")).wait()
   
   // Save copies of each contracts abi and address to the frontend.
   saveFrontendFiles(sogo , "Sogo");
   saveFrontendFiles(sogoNFT , "SogoNFT");
-  saveFrontendFiles(organizationFactory , "OrganizationFactory");
+  saveFrontendFiles(socialProjectFactory , "SocialProjectFactory");
 
   console.log("SogoNFT address: ", sogoNFT.address);
   console.log("Sogo address: ", sogo.address);
-  console.log("Organization Factory address: ", organizationFactory.address);
+  console.log("SocialProject Factory address: ", socialProjectFactory.address);
 }
 
 function saveFrontendFiles(contract, name) {
