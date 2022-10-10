@@ -2,49 +2,30 @@
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-
 import "hardhat/console.sol";
 
-struct SogoFund {
-    uint fundId;
-    string fundName;
-    address creator;
-    // mapping(address => uint) donations;
-    // mapping(address => uint) ngoGrants;
-    address payable org;
-    uint totalValue;
-}
-
-struct SogoArt {
-    uint SogoArtId;
+struct SocialToken {
+    uint itemId;
     IERC721 nft;
-    uint tokenId;
     uint price;
+    uint tokenId;
     address payable beneficiaryNgo;
     address payable seller;
     bool sold;
 }
 
 contract Sogo is ReentrancyGuard {
-
-    // Variables
     address payable public immutable feeAccount; // the account that receives fees
     uint public immutable feePercent; // the fee percentage on sales 
     uint public fundsCount;
-    uint public sogoArtCount;
-    
-    // fundId -> SogoFund
-    mapping(uint => SogoFund) public sogoFunds;
-    // sogo token id -> community id
-    mapping(uint => uint) public tokenToCommunity;
+    uint public socialTokensCount;
     // nft seller token count
     mapping(address => uint) public sellerTokenCount;
     // beneficiary org to tokens
-    mapping(address => SogoArt[]) public orgTokens;
-    // sogoArtId -> sogoArt
-    mapping(uint => SogoArt) public sogoArts;
+    mapping(address => SocialToken[]) public orgTokens;
+    // itemId -> socialToken
+    mapping(uint => SocialToken) public socialTokens;
 
     event DonatedToFund(
         address indexed donor,
@@ -59,8 +40,8 @@ contract Sogo is ReentrancyGuard {
         uint totalValue
     );
 
-    event SogoArtOffered(
-        uint sogoArtId,
+    event SocialTokenOffered(
+        uint itemId,
         address indexed nft,
         uint tokenId,
         uint price,
@@ -68,8 +49,8 @@ contract Sogo is ReentrancyGuard {
         address indexed seller
     );
 
-    event SogoArtBought(
-        uint sogoArtId,
+    event SocialTokenBought(
+        uint itemId,
         address nft,
         uint tokenId,
         uint price,
@@ -83,18 +64,18 @@ contract Sogo is ReentrancyGuard {
         feePercent = _feePercent;
     }
 
-    // Make NFT art to offer on the community fund
+    // Publish social token for selling in Sogo 
     function makeSogoToken(IERC721 _nft, uint _tokenId, uint _price, address payable beneficiaryNgo) external nonReentrant {
         require(_price > 0, "Price must be greater than zero");
         // increment itemCount
-        sogoArtCount ++;
+        socialTokensCount ++;
         sellerTokenCount[msg.sender] ++;
         
         // transfer nft
         _nft.transferFrom(msg.sender, address(this), _tokenId);
         
-        SogoArt memory newSogoArt = SogoArt (
-            sogoArtCount,
+        SocialToken memory newSocialToken = SocialToken (
+            socialTokensCount,
             _nft,
             _tokenId,
             _price,
@@ -103,12 +84,12 @@ contract Sogo is ReentrancyGuard {
             false
         );
         // add new item to items mapping
-        sogoArts[sogoArtCount] = newSogoArt;
-        orgTokens[beneficiaryNgo].push(newSogoArt);
+        socialTokens[socialTokensCount] = newSocialToken;
+        orgTokens[beneficiaryNgo].push(newSocialToken);
         
         // emit Offered event
-        emit SogoArtOffered(
-            sogoArtCount,
+        emit SocialTokenOffered(
+            socialTokensCount,
             address(_nft),
             _tokenId,
             _price,
@@ -119,19 +100,20 @@ contract Sogo is ReentrancyGuard {
 
     function purchaseSogoArt(uint _itemId) public payable nonReentrant {
         uint _totalPrice = getTotalPrice(_itemId);
-        SogoArt storage item = sogoArts[_itemId];
-        require(_itemId > 0 && _itemId <= sogoArtCount, "Sogo Art doesn't exist");
+        SocialToken storage item = socialTokens[_itemId];
+        require(_itemId > 0 && _itemId <= socialTokensCount, "Sogo Art doesn't exist");
         require(msg.value >= _totalPrice, "not enough ether to cover item price and market fee");
         require(!item.sold, "item already sold");
         // pay seller and feeAccount
         item.seller.transfer(item.price);
+        item.beneficiaryNgo.transfer(item.price);
         feeAccount.transfer(_totalPrice - item.price);
         // update item to sold
         item.sold = true;
         // transfer nft to buyer
         item.nft.transferFrom(address(this), msg.sender, item.tokenId);
         // emit Bought event
-        emit SogoArtBought(
+        emit SocialTokenBought(
             _itemId,
             address(item.nft),
             item.tokenId,
@@ -142,71 +124,11 @@ contract Sogo is ReentrancyGuard {
         );
     }
 
-    function getOrgTokens(address orgAddress) view public returns (SogoArt[] memory) {
+    function getOrgTokens(address orgAddress) view public returns (SocialToken[] memory) {
         return orgTokens[orgAddress];
     }
 
     function getTotalPrice(uint _itemId) view public returns(uint){
-        return((sogoArts[_itemId].price*(100 + feePercent))/100);
+        return((socialTokens[_itemId].price*(100 + feePercent))/100);
     }
-
-    // // Make Community Fund
-    // function makeSogoFund(address ong, uint initialDonation, string memory _fundName) external payable nonReentrant {
-    //     uint totalDonation = getTotalPrice(initialDonation);
-    //     require(totalDonation > 0, "initial donation needs to be > 0");
-    //     require(initialDonation <= msg.value, "msg value is lower than initial Donation");        
-    //     fundsCount ++;
-
-    //     // msg.sender.transfer(ong, initialDonation);
-    //     // msg.sender.transfer(address(this), initialDonation);
-
-    //     // transfer fee to sogo
-    //     feeAccount.transfer(totalDonation - initialDonation);
-
-    //     // SogoFund storage newFund = SogoFund.push();
-    //     // newRequest.value = value;
-    //     SogoFund memory newFund = SogoFund ({
-    //         fundId: fundsCount,
-    //         fundName: _fundName, 
-    //         creator: msg.sender,
-    //         org: payable(ong), 
-    //         totalValue: totalDonation
-    //     });
-    //     // newFund.donatisons[msg.sender] = totalDonation;
-
-    //     // add new item to items mapping
-    //     sogoFunds[fundsCount] = newFund;
-
-    //     // emit FundCreated event
-    //     emit FundCreated(
-    //         fundsCount,
-    //         msg.sender,
-    //         payable(ong),
-    //         totalDonation
-    //     );
-    // }
-
-    // function donateToFund(uint fundId, uint donationValue) external payable nonReentrant {
-    //     uint totalDonation = getTotalPrice(donationValue);
-    //     require(totalDonation > 0, "initial donation needs to be > 0");
-    //     SogoFund memory sogoFund = sogoFunds[fundId];
-
-    //     // transfer donation to ong
-    //     sogoFund.org.transfer(donationValue);
-
-    //     // transfer fee to Sogo
-    //     feeAccount.transfer(totalDonation - donationValue);
-
-    //     // update Fund total value to sold
-    //     sogoFund.totalValue += donationValue;
-    //     // comFund.donators.append(msg.sender);
-
-    //     // emit Donation event
-    //     emit DonatedToFund(
-    //         msg.sender,
-    //         fundId,
-    //         donationValue
-    //     );
-    // }
-
 }
