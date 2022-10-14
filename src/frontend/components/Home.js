@@ -45,7 +45,7 @@ const Home = ({socialProjectFactory }) => {
       
         <div className="px-5 container">
           <Row xs={1} md={1} lg={1} className="g-4 py-5">
-            <h6 className="normal-txt" style={{ fontSize: "6rem", fontFamily: 'Poppins', textAlign:"center",}}>a evolução do investimento social</h6>  
+            <h6 className="normal-txt" style={{ fontSize: "6rem", fontFamily: 'Poppins', textAlign:"center",}}>A evolução do investimento social</h6>  
           </Row>
           <Row xs={1} md={1} lg={1} className="g-4 py-5">
             <h3 className="normal-txt" style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"center" }}>{totalDonated.toString()/10e17} ETH doados para {projCount} projetos sociais</h3>

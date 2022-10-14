@@ -65,7 +65,8 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
         seller: item.seller,
         // name: metadata.name,
         // description: metadata.description,
-        image: '/assets/polvo_placeholder.png'
+        image: '/assets/polvo_placeholder.png',
+        sold: item.sold
       })
       // }
     }
@@ -100,34 +101,8 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
               <Tab label="Apoiadores" value={3}/>
           </Tabs>
           <Box sx={{ padding: 2 }}>
-              {tabIndex === 0 && (
-              <Row xs={3} md={3} lg={3} className="g-4 py-5" style={{ height:'500px' }}>
-                  <Card onClick={() => {}} style={{ cursor: "pointer", width:'33%', height:'100%' }}>
-                    <Card.Body color="primary">
-                      <Card.Text>
-                        <h6 className="normal-txt" style={{ padding:'10%', fontSize: "3rem", fontFamily: 'Aktiv Grotesk', textAlign:"left" }}>Light Funder</h6>
-                      </Card.Text>
-                      <Card.Text style={{textAlign: "left"}}>Doações menores,</Card.Text>
-                      <Card.Text style={{textAlign: "left"}}>Recompensas singelas</Card.Text>
-                    </Card.Body>
-                  </Card>
-                  <Card onClick={() => {}} style={{ cursor: "pointer", width:'33%', height:'100%' }}>
-                    <Card.Body color="primary">
-                      <Card.Text>Bold Funder</Card.Text>
-                    </Card.Body>
-                  </Card>
-                  <Card onClick={() => {}} style={{ cursor: "pointer", width:'33%', height:'100%' }}>
-                    <Card.Body color="primary">
-                      <Card.Text>Super Funder</Card.Text>
-                    </Card.Body>
-                  </Card>
-              </Row>
-              )}
               {tabIndex === 0 && allValues.socialTokens && allValues.socialTokens.length > 0 && (
                 <div>
-                <Row xs={1} md={2} lg={4} className="g-4 py-5">
-                  <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>Explore doações e recompensas</h6>
-                </Row>
                 <Row xs={1} md={2} lg={4} className="g-4 py-5">
                   {allValues.socialTokens.map((socialToken, idx) => {
                     return (
@@ -135,9 +110,18 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
                       <Card onClick={() => {buySocialToken(socialToken)}} style={{ cursor: "pointer" }}>
                         <Card.Title className="card-title">Doe R${(socialToken.totalPrice/10e17)*1400*10e17}  </Card.Title>
                         <Card.Body color="primary">
-                          <Card.Img src={socialToken.image} style={{ width:'200px', height:'200px'}}/>
-                          <Card.Text>{socialToken.description}</Card.Text>
-                          {socialToken.sold && (<div> This token is sold </div>)}
+                          {socialToken.sold ? (
+                            <div>
+                              <Card.Img src={socialToken.image} style={{ width:'200px', height:'200px', opacity:'20%'}}/>
+                              <Card.Text> Token Sold</Card.Text>
+                            </div>
+                          ) : 
+                          ( <div>
+                              <Card.Img src={socialToken.image} style={{ width:'200px', height:'200px'}}/>
+                              <Card.Text> Description:  {socialToken.description}</Card.Text>
+                            </div>
+                          )}
+                           
                         </Card.Body>
                         <Card.Footer>
                           <Row xs={2} md={2} lg={2}>
