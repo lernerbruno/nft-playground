@@ -8,8 +8,8 @@ import "hardhat/console.sol";
 struct SocialToken {
     uint itemId;
     IERC721 nft;
-    uint price;
     uint tokenId;
+    uint price;
     address payable socialProject;
     address payable seller;
     bool sold;
@@ -79,8 +79,8 @@ contract Sogo is ReentrancyGuard {
             _nft,
             _tokenId,
             _price,
-            socialProject,
-            payable(msg.sender),
+            payable(address(socialProject)),
+            payable(msg.sender), 
             false
         );
         // add new item to items mapping
@@ -104,6 +104,7 @@ contract Sogo is ReentrancyGuard {
         require(_itemId > 0 && _itemId <= socialTokensCount, "Social Token doesn't exist");
         require(!item.sold, "item already sold");
         require(msg.value >= _totalPrice, "not enough ether to cover item price and market fee");
+        require(msg.sender != item.seller, "You cannot buy what you are selling");
 
         // pay seller and feeAccount
         uint sellerShare = uint(item.price/10);
@@ -113,9 +114,9 @@ contract Sogo is ReentrancyGuard {
         feeAccount.transfer(_totalPrice - (sellerShare + projectShare));
         
         // update item to sold and transfer to new owner
+        item.nft.transferFrom(address(this), msg.sender, item.itemId);
         item.sold = true;
-        item.nft.transferFrom(address(this), msg.sender, item.tokenId);
-        
+
         // emit Bought event
         emit SocialTokenBought(
             _itemId,

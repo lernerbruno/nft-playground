@@ -31,18 +31,6 @@ function App() {
   
   // MetaMask Login/Connect
   const web3Handler = async () => {
-    // Get provider from Metamask
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
-
-    window.ethereum.on('chainChanged', (chainId) => {
-      window.location.reload();
-    })
-    loadContracts(signer)
-  }
-
-  const connectWallet = async() => {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     setAccount(accounts[0])
     // Get provider from Metamask
@@ -53,7 +41,13 @@ function App() {
     window.ethereum.on('accountsChanged', async function (accounts) {
       setAccount(accounts[0])
       await web3Handler()
+      window.location.reload(false);
     })
+
+    window.ethereum.on('chainChanged', (chainId) => {
+      window.location.reload();
+    })
+
     loadContracts(signer)
   }
 
@@ -72,7 +66,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <>
-          <Navigation connectWallet={connectWallet} account={account} />
+          <Navigation connectWallet={web3Handler} account={account} />
         </>
         <div>
           {loading ? (
@@ -97,16 +91,16 @@ function App() {
                 <SocialProjects socialProjectFactory={socialProjectFactory} />
               }/>
               <Route path="/projects/:projId" element={
-                <SocialProject nft={nft} sogo={sogo} socialProjectFactory={socialProjectFactory}/>
+                <SocialProject nft={nft} sogo={sogo} socialProjectFactory={socialProjectFactory} account={account}/>
               }/>
               <Route path="/create-sogo-nft" element={
-                <CreateSogoNFT sogo={sogo} nft={nft} socialProjectFactory={socialProjectFactory} />
+                <CreateSogoNFT sogo={sogo} nft={nft} socialProjectFactory={socialProjectFactory} account={account}/>
               } />
               <Route path="/my-listed-items" element={
                 <MyListedItems marketplace={sogo} nft={nft} account={account} />
               } />
               <Route path="/create-project" element={
-                <CreateSocialProject socialProjectFactory={socialProjectFactory} />
+                <CreateSocialProject socialProjectFactory={socialProjectFactory} account={account}/>
               } />
               <Route path="/my-purchases" element={
                 <MyPurchases sogo={sogo} nft={nft} account={account} />

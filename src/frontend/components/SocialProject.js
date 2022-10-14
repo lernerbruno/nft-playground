@@ -48,26 +48,26 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
     let socialTokens = []
     for (let i = 1; i <= projTokens.length; i++) {
       const item = await sogo.socialTokens(i)
-      if (!item.sold) {
-        const uri = await nft.tokenURI(item.itemId)
-        const name = JSON.parse(uri)["name"]
-        const description = JSON.parse(uri)["description"]
-        // use uri to fetch the nft metadata stored on ipfs 
-        // const response = await fetch(uri)
-        // const metadata = await response.json()
-        
-        const totalPrice = await sogo.getTotalPrice(item.itemId)
-        socialTokens.push({
-          totalPrice,
-          name: name,
-          description: description,
-          itemId: item.itemId,
-          seller: item.seller,
-          // name: metadata.name,
-          // description: metadata.description,
-          image: '/assets/polvo_placeholder.png'
-        })
-      }
+      // if (!item.sold) {
+      const uri = await nft.tokenURI(item.tokenId)
+      const name = JSON.parse(uri)["name"]
+      const description = JSON.parse(uri)["description"]
+      // use uri to fetch the nft metadata stored on ipfs 
+      // const response = await fetch(uri)
+      // const metadata = await response.json()
+      
+      const totalPrice = await sogo.getTotalPrice(item.itemId)
+      socialTokens.push({
+        totalPrice,
+        name: name,
+        description: description,
+        itemId: item.itemId,
+        seller: item.seller,
+        // name: metadata.name,
+        // description: metadata.description,
+        image: '/assets/polvo_placeholder.png'
+      })
+      // }
     }
     setAllValues(prevAllValues => ({...prevAllValues, proj: _proj}))
     setAllValues(prevAllValues => ({...prevAllValues, socialTokens: socialTokens}))
@@ -76,7 +76,7 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
 
   const buySocialToken = async (socialToken) => {
     await (await sogo.purchaseSocialToken(socialToken.itemId, { value: socialToken.totalPrice })).wait()
-    loadSocialTokens()
+    loadSocialTokens(allValues.proj)
   }
   
   useEffect(() => {
@@ -104,7 +104,9 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
               <Row xs={3} md={3} lg={3} className="g-4 py-5" style={{ height:'500px' }}>
                   <Card onClick={() => {}} style={{ cursor: "pointer", width:'33%', height:'100%' }}>
                     <Card.Body color="primary">
-                      <Card.Text>Light Funder</Card.Text>
+                      <Card.Text>
+                        <h6 className="normal-txt" style={{ padding:'10%', fontSize: "3rem", fontFamily: 'Aktiv Grotesk', textAlign:"left" }}>Light Funder</h6>
+                      </Card.Text>
                       <Card.Text style={{textAlign: "left"}}>Doações menores,</Card.Text>
                       <Card.Text style={{textAlign: "left"}}>Recompensas singelas</Card.Text>
                     </Card.Body>
@@ -135,10 +137,11 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
                         <Card.Body color="primary">
                           <Card.Img src={socialToken.image} style={{ width:'200px', height:'200px'}}/>
                           <Card.Text>{socialToken.description}</Card.Text>
+                          {socialToken.sold && (<div> This token is sold </div>)}
                         </Card.Body>
                         <Card.Footer>
                           <Row xs={2} md={2} lg={2}>
-                            <Button className='button-primary' style={{width:'70%'}}><Card.Text variant='primary'> Comprar Token </Card.Text></Button>
+                            <Button disabled={socialToken.sold} onClick={() => {buySocialToken(socialToken)}} className='button-primary' style={{width:'70%'}}><Card.Text variant='primary'> Comprar Token </Card.Text></Button>
                           </Row>
                         </Card.Footer>
                       </Card>

@@ -13,14 +13,6 @@ export default function MyPurchases({ sogo, nft, account }) {
     const purchases = await Promise.all(results.map(async i => {
       // fetch arguments from each result
       i = i.args
-      // get uri url from nft contract
-      const uri = await nft.tokenURI(i.tokenId)
-      // use uri to fetch the nft metadata stored on ipfs 
-      const response = await fetch(uri)
-      
-      // const metadata = await response.json()
-      console.log(i)
-      // get total price of item (item price + fee)
       const totalPrice = await sogo.getTotalPrice(i.itemId)
       // define listed item object
       let purchasedItem = {
@@ -55,8 +47,9 @@ export default function MyPurchases({ sogo, nft, account }) {
             {purchases.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
                 <Card>
+                  <Card.Title>{item.name}</Card.Title>
+                  <Card.Body>{item.description}</Card.Body>
                   <Card.Img variant="top" src={'/assets/polvo_placeholder.png'} />
-                  <Card.Body>Paguei por 70% da faculdade de um aluno na PUC</Card.Body>
                   <Card.Footer>Custou {ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
                 </Card>
               </Col>

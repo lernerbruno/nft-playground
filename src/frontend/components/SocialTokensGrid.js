@@ -42,7 +42,6 @@ const SocialTokensGrid = ({ socialProjectFactory }) => {
   }
 
   const donate = async() => {
-    console.log(ethers.utils.parseEther('1.01'))
     await(await socialProjectFactory.donateToProject(projId, ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })).wait()
     loadSocialProject()
   }

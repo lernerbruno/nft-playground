@@ -9,39 +9,37 @@ const CreateSogoNFT = ({ sogo, nft, socialProjectFactory }) => {
   const [price, setPrice] = useState(null)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [orgAddress, setOrgAddress] = useState('')
-  const [orgs, setOrgs] = useState([])
+  const [projAddress, setProjAddress] = useState('')
+  const [projs, setProjs] = useState([])
 
   const loadSocialProjects = async () => {
-    const orgCount = await socialProjectFactory.getSocialProjectsCount()
-    let orgs = []
-    for (let i = 0; i < orgCount; i++) {
-      const orgName = await socialProjectFactory.getProjectName(i)
-      const orgPurpose = await socialProjectFactory.getProjectPurpose(i)
-      const orgDescription = await socialProjectFactory.getProjectDescription(i)
-      const orgBalance = await socialProjectFactory.getProjectBalance(i)
-      const orgAddress = await socialProjectFactory.getProjectContract(i)
+    const projCount = await socialProjectFactory.getSocialProjectsCount()
+    let projs = []
+    for (let i = 0; i < projCount; i++) {
+      const projName = await socialProjectFactory.getProjectName(i)
+      const projPurpose = await socialProjectFactory.getProjectPurpose(i)
+      const projDescription = await socialProjectFactory.getProjectDescription(i)
+      const projBalance = await socialProjectFactory.getProjectBalance(i)
+      const projAddress = await socialProjectFactory.getProjectContract(i)
 
-      orgs.push({
-        name: orgName,
-        purpose: orgPurpose,
-        description: orgDescription,
-        balance: orgBalance,
-        address: orgAddress
+      projs.push({
+        name: projName,
+        purpose: projPurpose,
+        description: projDescription,
+        balance: projBalance,
+        address: projAddress
       })
     }
-    setOrgs(orgs)
+    setProjs(projs)
   }
 
   const uploadToIPFS = async (event) => {
     event.preventDefault()
     const file = event.target.files[0]
-    console.log(file.name)
     
     if (typeof file !== 'undefined') {
       try {
         // const result = await client.add(file)
-        // console.log(result)
         setImage(`${file.name}`)
       } catch (error){
         console.log("ipfs image upload error: ", error)
@@ -49,10 +47,9 @@ const CreateSogoNFT = ({ sogo, nft, socialProjectFactory }) => {
     }
   }
   const createNFT = async () => {
-    console.log(image, price, name, description, orgAddress)
-    if (!image || !price || !name || !description || !orgAddress) return
+    if (!image || !price || !name || !description || !projAddress) return
     try{
-      console.log(image, price, name, description, orgAddress)
+      console.log(image, price, name, description, projAddress)
       mintThenList(JSON.stringify({image, price, name, description}))
     } catch(error) {
       console.log("ipfs uri upload error: ", error)
@@ -69,7 +66,7 @@ const CreateSogoNFT = ({ sogo, nft, socialProjectFactory }) => {
     await(await nft.setApprovalForAll(sogo.address, true)).wait()
     // add nft to marketplace
     const listingPrice = ethers.utils.parseEther(price.toString())
-    await(await sogo.makeSocialToken(nft.address, id, listingPrice, orgAddress)).wait()
+    await(await sogo.makeSocialToken(nft.address, id, listingPrice, projAddress)).wait()
   }
 
   useEffect(() => {
@@ -91,10 +88,10 @@ const CreateSogoNFT = ({ sogo, nft, socialProjectFactory }) => {
               <Form.Control onChange={(e) => setDescription(e.target.value)} size="lg" required as="textarea" placeholder="Descrição" />
               <Form.Control onChange={(e) => setPrice(e.target.value)} size="lg" required type="number" placeholder="Preço em ETH" />
               
-              { orgs.length > 0 &&
-                <Form.Select onChange={(e) => setOrgAddress(e.target.value)} size="lg" required as="dropdown" placeholder="Escolha a ONG beneficiada  " >
-                { orgs.map((org, idx) => (
-                  <option value={org.address}>{org.name}</option> 
+              { projs.length > 0 &&
+                <Form.Select onChange={(e) => setProjAddress(e.target.value)} size="lg" required as="dropdown" placeholder="Escolha a ONG beneficiada  " >
+                { projs.map((proj, idx) => (
+                  <option value={proj.address}>{proj.name}</option> 
                   ))}
                 </Form.Select>
               }
