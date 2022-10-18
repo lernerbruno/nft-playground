@@ -62,6 +62,6 @@ contract SocialProjectFactory{
     }
 
     function donateToProject(uint256 _projectIndex, uint256 _amount) public payable {
-        return SocialProject(payable(getProjectContract(_projectIndex))).directDonate(_amount);
+        return SocialProject(payable(getProjectContract(_projectIndex))).directDonate(_amount, msg.sender);
     } 
 }

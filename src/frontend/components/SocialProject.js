@@ -3,6 +3,7 @@ import {useParams } from 'react-router-dom';
 import { Row, Col, Card, Button } from 'react-bootstrap'
 import ProjectBanner from './ProjectBanner';
 import { Tab, Tabs, Box } from '@mui/material'
+import SocialTokensGrid from './SocialTokensGrid';
 
 const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
   const [allValues, setAllValues] = useState({
@@ -95,48 +96,14 @@ const SocialProject = ({ sogo, nft, socialProjectFactory }) => {
         <div className="px-5 container">
           <ProjectBanner socialProjectFactory={socialProjectFactory}/>
           <Tabs value={tabIndex} onChange={handleTabChange}>
-              <Tab label="Como apoiar" value={0}/>
+              <Tab label="Doações e Recompensas" value={0}/>
               <Tab label="O Projeto" value={1}/>
               <Tab label="Impacto" value={2}/>
               <Tab label="Apoiadores" value={3}/>
           </Tabs>
+          
           <Box sx={{ padding: 2 }}>
-              {tabIndex === 0 && allValues.socialTokens && allValues.socialTokens.length > 0 && (
-                <div>
-                <Row xs={1} md={2} lg={4} className="g-4 py-5">
-                  {allValues.socialTokens.map((socialToken, idx) => {
-                    return (
-                    <Col key={idx} className="overflow-hidden">
-                      <Card onClick={() => {buySocialToken(socialToken)}} style={{ cursor: "pointer" }}>
-                        <Card.Title className="card-title">Doe R${(socialToken.totalPrice/10e17)*1400*10e17}  </Card.Title>
-                        <Card.Body color="primary">
-                          {socialToken.sold ? (
-                            <div>
-                              <Card.Img src={socialToken.image} style={{ width:'200px', height:'200px', opacity:'20%'}}/>
-                              <Card.Text> Token Sold</Card.Text>
-                            </div>
-                          ) : 
-                          ( <div>
-                              <Card.Img src={socialToken.image} style={{ width:'200px', height:'200px'}}/>
-                              <Card.Text> Description:  {socialToken.description}</Card.Text>
-                            </div>
-                          )}
-                           
-                        </Card.Body>
-                        <Card.Footer>
-                          <Row xs={2} md={2} lg={2}>
-                            <Button disabled={socialToken.sold} onClick={() => {buySocialToken(socialToken)}} className='button-primary' style={{width:'70%'}}><Card.Text variant='primary'> Comprar Token </Card.Text></Button>
-                          </Row>
-                        </Card.Footer>
-                      </Card>
-                    </Col>
-                    
-                  )})}  
-                </Row>
-                </div>
-                
-              )}
-              
+              {tabIndex === 0 && (<SocialTokensGrid socialTokens={allValues.socialTokens} buySocialToken={buySocialToken}></SocialTokensGrid>)}
               {tabIndex === 3 && allValues.proj.donors && allValues.proj.donors.length > 0 &&
                 <div>
                   <h6 className="normal-txt" style={{ fontSize: "3rem", fontFamily: 'Poppins', textAlign:"left" }}>Doações</h6>  <br/>

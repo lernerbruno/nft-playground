@@ -1,89 +1,89 @@
-import { useState, useEffect, useRef } from 'react'
-import { withRouter, useParams } from 'react-router-dom'; 
+import { useState, useEffect } from 'react'
+import { Row, Col, Card, Button } from 'react-bootstrap'
+import { Slider } from '@mui/material'
 import { ethers } from "ethers"
-import { Modal, Row, Col, Card, Button } from 'react-bootstrap'
-import { Tab, Tabs, Box } from '@mui/material'
 
-const SocialTokensGrid = ({ socialProjectFactory }) => {
+const SocialTokensGrid = ({ socialTokens, buySocialToken }) => {
   const [allValues, setAllValues] = useState({
+    priceFilter: [0, 10000],
     loading: true,
-    proj: {},
-    confirmPassword: '',
-    donationCount: 0
+    value: 0
   });
-  const [tabIndex, setTabIndex] = useState(0);
-  let { projId } = useParams();
 
-  const handleTabChange = (event, newTabIndex) => {
-    setTabIndex(newTabIndex);
-  };
-
-  const loadSocialProject = async() => {
-    const projName = await socialProjectFactory.getProjectName(projId)
-    const projPurpose = await socialProjectFactory.getProjectPurpose(projId)
-    const projDescription = await socialProjectFactory.getProjectDescription(projId)
-    const projBalance = await socialProjectFactory.getProjectBalance(projId)
-    const donors = await socialProjectFactory.getDonors(projId)
-    const donationsAmounts = await socialProjectFactory.getDonationsAmounts(projId)
-    const projAddress = await socialProjectFactory.getProjectContract(projId)
-    
-    const _proj = {
-      name: projName,
-      purpose: projPurpose,
-      description: projDescription,
-      balance: projBalance,
-      donors: donors,
-      donationsAmounts: donationsAmounts,
-      address: projAddress
-    }
-    setAllValues(prevAllValues => ({...prevAllValues, proj: _proj}))
-    setAllValues(prevAllValues => ({...prevAllValues, loading: false})) 
-    
+  const handlePriceFilter =  (_, newValue) => {
+    setAllValues(prevAllValues => ({...prevAllValues, priceFilter: newValue}))
   }
 
-  const donate = async() => {
-    await(await socialProjectFactory.donateToProject(projId, ethers.utils.parseEther('1'), { value: ethers.utils.parseEther('1') })).wait()
-    loadSocialProject()
+  const valueText = (value) => {
+    return `R$ ${value}`
   }
-  
+
+  const loadTokens = () => {
+    let maxPrice = 0
+    socialTokens.map((socialToken, _) => {
+        if (socialToken.totalPrice > maxPrice) {
+            maxPrice = ethers.utils.formatEther(socialToken.totalPrice)*1400
+            console.log(maxPrice)
+        }
+    })
+    setAllValues(prevAllValues => ({...prevAllValues, priceFilter: [0, maxPrice]}))
+    setAllValues(prevAllValues => ({...prevAllValues, loading: false}))
+  }
+    
   useEffect(() => {
-    loadSocialProject()
+    loadTokens()
     }, [])
   if (allValues.loading) return (
     <main style={{ padding: "1rem 0" }}>
-      <h2>Loading...</h2>
+        <h2>Loading...</h2>
     </main>
   )
   return (
-        <Row xs={2} md={2} lg={2} className="g-4 py-5">
-            <Col style={{width: '70%'}}>
-            <h6 className="normal-txt" style={{ fontSize: "4rem", fontFamily: 'Poppins', textAlign:"left" }}>{allValues.proj && allValues.proj.name}</h6> <br/>
-            <h6 className="normal-txt" style={{ width:'70%', fontSize: "2rem", fontFamily: 'Poppins', textAlign:"left" }}>{allValues.proj && allValues.proj.description}</h6>  
+    <div>
+        <Row xs={4} md={4} lg={4} className="g-4 py-1">
+            <Col>
+                <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"center",}}>Valor da doação</h6>  
+                <Slider
+                    value={allValues.priceFilter}
+                    onChange={handlePriceFilter}
+                    valueLabelDisplay="auto"
+                    getAriaValueText={valueText}
+                />
             </Col>
-            <Col style={{width: '30%'}}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={tabIndex} onChange={handleTabChange}>
-                        <Tab label="Arrecadação" value={0}/>
-                        <Tab label="Metas" value={1}/>
-                    </Tabs>
-                </Box>
-                <Box sx={{ padding: 2 }}>
-                    {tabIndex === 0 && (
-                    <Row xs={2} md={2} lg={2} className="g-4 py-5">
-                        <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"left" }}>{allValues.proj.balance && allValues.proj.balance.toString()/10e17} ETH arrecadados</h6> <br/>
-                        <h6 className="normal-txt" style={{ fontSize: "1rem", fontFamily: 'Poppins', textAlign:"right" }}>28%</h6> <br/>
-                    </Row>
-                    )}
-                    {tabIndex === 1 && (
-                    <Row xs={2} md={2} lg={2} className="g-4 py-5">
-                    </Row>
-                    )}
-                </Box>
-                <Button className='button-primary' style={{float:"right"}} onClick={() => {donate()}} size="sm">
-                    Doe e Apoie
-                </Button>
-            </Col>
+            
         </Row>
+        <Row xs={1} md={2} lg={4} className="g-4 py-5">
+            {socialTokens.map((socialToken, idx) => {
+            return socialToken.totalPrice > allValues.priceFilter[0] 
+            && socialToken.totalPrice < allValues.priceFilter[1] && (
+            <Col key={idx} className="overflow-hidden">
+              <Card onClick={() => {buySocialToken(socialToken)}} style={{ cursor: "pointer" }}>
+                <Card.Title className="card-title">Doe R${(socialToken.totalPrice/10e17)*1400*10e17}  </Card.Title>
+                <Card.Body color="primary">
+                  {socialToken.sold ? (
+                    <div>
+                      <Card.Img src={socialToken.image} style={{ width:'200px', height:'200px', opacity:'20%'}}/>
+                      <Card.Text> Token Sold</Card.Text>
+                    </div>
+                  ) : 
+                  ( <div>
+                      <Card.Img src={socialToken.image} style={{ width:'200px', height:'200px'}}/>
+                      <Card.Text> Description:  {socialToken.description}</Card.Text>
+                    </div>
+                  )}
+                   
+                </Card.Body>
+                <Card.Footer>
+                  <Row xs={2} md={2} lg={2}>
+                    <Button disabled={socialToken.sold} onClick={() => {buySocialToken(socialToken)}} className='button-primary' style={{width:'70%'}}><Card.Text variant='primary'> Comprar Token </Card.Text></Button>
+                  </Row>
+                </Card.Footer>
+              </Card>
+            </Col>
+            
+          )})}  
+        </Row>
+    </div>
   );
 }
 export default SocialTokensGrid

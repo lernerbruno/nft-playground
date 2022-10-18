@@ -67,11 +67,11 @@ contract SocialProject {
         return donationsAmounts;
     }
 
-    function directDonate(uint256 _amount) public payable {
+    function directDonate(uint256 _amount, address sender) public payable {
         // require(msg.value >= _amount, "not enough ether to donate this amount");
-        // payable(address(this)).transfer(msg.value);
-        donations[msg.sender] += _amount;
-        donors.push(msg.sender);
+        payable(address(this)).transfer(msg.value);
+        donations[sender] += _amount;
+        donors.push(sender);
         donationsAmounts.push(_amount);
         balance += _amount;
     }
