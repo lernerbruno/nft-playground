@@ -4,6 +4,7 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "hardhat/console.sol";
+import "./SocialProject.sol";
 
 struct SocialToken {
     uint itemId;
@@ -32,6 +33,10 @@ contract Sogo is ReentrancyGuard {
         uint communityId,
         uint value
     );
+
+    receive() payable external {
+        
+    }
 
     event FundCreated(    
         uint communityId,
@@ -110,7 +115,8 @@ contract Sogo is ReentrancyGuard {
         uint sellerShare = uint(item.price/10);
         uint projectShare = uint(item.price*9/10);
         item.seller.transfer(sellerShare);
-        item.socialProject.transfer(projectShare);
+        // item.socialProject.transfer(projectShare);
+        SocialProject(payable(item.socialProject)).directDonate(projectShare, msg.sender);
         feeAccount.transfer(_totalPrice - (sellerShare + projectShare));
         
         // update item to sold and transfer to new owner

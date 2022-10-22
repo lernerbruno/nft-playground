@@ -2,7 +2,7 @@
 
 .App {
   text-align: center;
-  background-color: #DEE1E6;
+  background-color: #F9FAFB;
 }
 
 .App-logo {
@@ -17,7 +17,7 @@
 }
 
 .color-nav {
-  background-color: #F6EFEA;
+  background-color: #FFFFFF;
 }
 
 .text-nav {
@@ -36,9 +36,15 @@
 
 
 .button-primary {
-  color:#0D0D0D;
-  background-color:#BCAAE2;
-  border-color:#BCAAE2;
+  color:#FFFFFF;
+  background-color:#7F56D9;
+  border-color:#7F56D9;
+  text-align: "right"
+}
+.button-secondary {
+  color:#344054;
+  background-color:#FFFFFF;
+  border-color:#FFFFFF;
   text-align: "right"
 }
 

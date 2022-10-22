@@ -55,7 +55,8 @@ const SocialTokensGrid = ({ socialTokens, buySocialToken }) => {
         <Row xs={1} md={2} lg={4} className="g-4 py-5">
             {socialTokens.map((socialToken, idx) => {
             return socialToken.totalPrice > allValues.priceFilter[0] 
-            && socialToken.totalPrice < allValues.priceFilter[1] && (
+            // && socialToken.totalPrice < allValues.priceFilter[1] 
+            && (
             <Col key={idx} className="overflow-hidden">
               <Card onClick={() => {buySocialToken(socialToken)}} style={{ cursor: "pointer" }}>
                 <Card.Title className="card-title">Doe R${(socialToken.totalPrice/10e17)*1400*10e17}  </Card.Title>

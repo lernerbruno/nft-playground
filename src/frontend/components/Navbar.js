@@ -11,16 +11,15 @@ const Navigation = ({ connectWallet, account }) => {
         <Navbar className="color-nav" expand="lg">
             <Container>
                 <Navbar.Brand onClick={() => {navigate('/')}} style={{cursor:'pointer'}} href="">
-                    <img src='assets/logoSogo.png' style={{ width:'100px', height:'52px'}}></img>
+                    <img src='assets/sogo.svg' style={{ width:'100px', height:'52px'}}></img>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto" >
-                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/projects">Explore Projects</Nav.Link>
-                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-sogo-nft">Create Sogo NFT</Nav.Link>
-                        {/* <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-sogo-fund">Create Sogo Fund</Nav.Link> */}
-                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-project">Create Project</Nav.Link>
-                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/my-purchases">My Purchases</Nav.Link>
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/">Home</Nav.Link>
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/projects">Projetos</Nav.Link>
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/create-sogo-nft">Criar Token Social</Nav.Link>
+                        <Nav.Link style={{color:'#0D0D0D'}} as={Link} to="/my-purchases">Minhas Recompensas</Nav.Link>
                     </Nav>
                     <Nav>
                         {account ? (

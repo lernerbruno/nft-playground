@@ -24,6 +24,9 @@ contract SocialProject {
     address[] donors;
     uint256[] donationsAmounts;
 
+    receive() payable external {
+        
+    }
     
     mapping(string => Claim) public pendingClaims; // claim UUID to Claim
     Claim public activeClaim;
@@ -69,7 +72,7 @@ contract SocialProject {
 
     function directDonate(uint256 _amount, address sender) public payable {
         // require(msg.value >= _amount, "not enough ether to donate this amount");
-        payable(address(this)).transfer(msg.value);
+        // payable(address(this)).transfer(_amount);
         donations[sender] += _amount;
         donors.push(sender);
         donationsAmounts.push(_amount);
